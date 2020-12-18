@@ -79,9 +79,9 @@ Através do ** <app-root> ** é que todos os nossos componentes serão carregado
 
 1 - Botão esquerdo no nome do projeto e escolha: Open in integrated terminal.
 
-2 - Escreva `ng serve ` para carregar a aplicação.
-
 ![img/001.png](https://github.com/aluiziomonteiro/angular/blob/master/img/001.png)
+
+2 - Escreva `ng serve ` para carregar a aplicação.
 
 3 - Acesse: localhost:4200/ pelo navegador. O resultado deve ser:
 
@@ -89,6 +89,59 @@ Através do ** <app-root> ** é que todos os nossos componentes serão carregado
 
 Esta é a face da nossa aplicação inicial. Conforme for-mos criando componentes, eles irão aparecendo aqui e as coisas vão se modificando.
 
+___
+
+### Módulos
+
+O angular trabalha com o conceito de módulos e componentes. O módulo pai é o app/app.module.ts e este pode ter submódulos.
+O que o usuário vê em nossas páginas na verdade são componentes. Já os módulos são, na verdade, limitadores de contextos.
+O que dá vida e cor aos módulos, são os componentes.
+
+~~~typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+  
+  // declaração dos componentes que vão compor o módulo
+    AppComponent 
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+~~~
+
+Abrindo o **app/app.component.ts** podemos ver que ele tem um **decorator** chamado **@Component({})** . Dentro dele temos algumas propriedades que dão informações ao angular para que os componentes possam ter funcionalidades a mais.
+
+~~~typescript
+
+import { Component } from '@angular/core';
+
+@Component({
+
+  // diretiva que vai fazer um binding com o nosso componente
+  // "cria uma tag dentro do index.html"
+  selector: 'app-root',
+  
+  // definição do template html do componente
+  templateUrl: './app.component.html',
+  
+  // definição do css do componente
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+
+// título que está no template
+  title = 'course-manager';
+}
+~~~
 
 
 
