@@ -143,7 +143,37 @@ export class AppComponent {
 }
 ~~~
 
+### Interpolação
 
+Em um template HTML no angular existem alguns recursos que são importantes no decorrer de um projeto.
+A Interpolação nada mais é do que um recurso de ‘embedar’ expressões dentro de uma área delimitada por {{ .. }}.
+
+O title do código do código exposto acima foi interpolada no template **app/app.component.html**.
+
+1 - Acesse o **app/app.component.html**, apague todo o seu conteúdo e em seguida interpole somente o title:
+
+
+![img/003.png](https://github.com/aluiziomonteiro/angular/blob/master/img/003.png)
+
+2 - Vamos criar um novo atributo dentro do **app/app.compontent.ts**. Vamos tipá-lo só para ficar explicito que é uma String.
+
+~~~typescript
+export class AppComponent {
+  title = 'course-manager';
+  nome: string = 'Clint Eastwood';
+}
+~~~
+
+3 - Interpole o nome no template logo abaixo do título
+
+~~~html
+{{ title }}
+<br />
+{{ nome }}
+~~~
+
+
+O angular nos dá todos os recursos do html e mais algumas coisas, como é o caso da interpolação e outros recursos.
 
 
 
