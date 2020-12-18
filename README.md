@@ -158,6 +158,7 @@ O title do código do código exposto acima foi interpolada no template **app/ap
 2 - Vamos criar um novo atributo dentro do **app/app.compontent.ts**. Vamos tipá-lo só para ficar explicito que é uma String.
 
 ~~~typescript
+...
 export class AppComponent {
   title = 'course-manager';
   nome: string = 'Clint Eastwood';
@@ -175,15 +176,71 @@ export class AppComponent {
 
 O angular nos dá todos os recursos do html e mais algumas coisas, como é o caso da interpolação e outros recursos.
 
+___
 
+### One-way  e two-way data binding
 
+One way databinding, significa que a view, sua página, só consegue ler o dado (model) disponibilizado pelo controller do AngularJS. É uma relação unidirecional, somente leitura. O two-way data binding você consegue tanto ler quando modificar um model disponibilizado pelo controller.
 
+1 - Para uma melhor visualização, vamos adicionar um input com `[ngModel]` que é a forma **One-way** de interligar o input com alguma variável
 
+~~~typescript
 
+{{ title }}
+<br />
+{{ name }}
+<br />
+// ngModel = nome-da-propriedade "binding"
+<input [ngModel] = "name" name="name" >
+~~~
 
+2 - Vai dar um erro de:
 
+~~~cmd
+Can't bind to 'ngModel' since it isn't a known property of 'input'.
+~~~
+Isso porque o ngModel perdence ao módulo de formulários e este módulo não importado.
 
+3 - Vamos importar o módulo no app/app.module.ts
 
+~~~typescript
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+// importação da classe FormsModule
+import { FormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [ // Declaração dos componentes
+    AppComponent
+  ],
+  imports: [ // Usado para importar Módulos
+    BrowserModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+~~~
+
+Lembre-se de que o app/app.module.ts é o módulo raíz da nossa aplicação. Isto quer dizer que tudo o que estiver nele, estará disponível para toda a nossa aplicação.
+
+4 - Rode o ng server e atualize a página se for necessário
+
+Caso a gente altere o conteúdo do input via navegador, esta alteração não será refletida em suas outras referências. Este é o one-way "Junção de uma via". É bom para exibir informações.
+
+![img/004.png](https://github.com/aluiziomonteiro/angular/blob/master/img/004.png)
+
+Já o two-way é uma junção de duas vias, onde as alterações feitas no input vão alterar o valor do atributo em todos os lugar em que o mesmo for referenciando.
+Para configurar o two-way basta adicionar parenteses dentro do colchetes do [ngModule].
+`<input [(ngModel)] = "name" name="name" >`
+
+![img/005.png](https://github.com/aluiziomonteiro/angular/blob/master/img/005.png)
 
 
 
