@@ -22,6 +22,7 @@ ___
 * Configurar dependências
 
 2 - Instalação do angular pelo npm (ng version)
+
 `sudo npm install -g @angular/cli`
 
  * Produtividade.
@@ -30,7 +31,72 @@ ___
  * Configuração de rotas.
  * Criar Guards.
 
-3 - Instalação VSCode [VSCode.deb](https://code.visualstudio.com/download)
+3 - Instalação [VSCode.deb](https://code.visualstudio.com/download)
+
+### Criando a base do projeto:
+1 - Abra o terminal e navegue até a pasta onde o projeto será criado.
+
+2 - Crie um projeto chamado course-manager:
+
+`ng new course-manager`
+
+ * O projeto será no contexto de um curso, editar, consultar, criar validações e navegar nas páginas dos cursos. 
+ 
+ * Não vamos utilizar o módulo de rotas por enquanto.
+ 
+ * A folha de estilo será em .css.
+
+3 - Abra o diretório do projeto pelo VSCode, ou digite "code ." no terminal, dentro da pasta do projeto.
+
+### Estrutura do projeto "Visão geral"
+
+ * **package.json: ** contém todas as dependências da nossa aplicação. Quando instalamos uma dependência, ela automaticamente vai aparecer aqui.
+ 
+ * **angular.json: ** contém configurações globais da aplicação e qual é o arquivo que vai inicializar a nossa aplicação. 
+ 
+	* **assets** path das pastas de imagens e arquivos estáticos globais, 
+	* **styles** path do .css global.
+	
+	* **scripts** path do .js global. 
+	
+	* **index** path da página base. "No caso do angular, tudo é envelopado aqui dentro, direta ou indiretamente."
+	
+	* **main** path da pasta coração da parada, responsável por fazer o bootstrap da aplicação, "hulk."
+ 
+ * **node_modules:** contém as dependências da aplicação.
+ * **src:** é onde você vai codar. 
+ 
+ 	* **index.html:** arquivo responsável por fazer o SPA (Single Page Application).
+ 	
+ 	* **main.ts:** inicializa a nossa aplicação. O main espera receber um módulo raíz para fazer o processo de leitura e inicialização da aplicação "bootstrap". Este módulo é o "appmodoule" que fica em: app.module.ts.
+
+ * ** app/app.module.ts:** vai ser lido pelo main.ts e a partir dele é que será lido o componente pai "componente responsável por envelopar todos os outros componentes que vamos criar de maneira direta ou indireta". Este componente será lido e carregado dentro do index.html, que é o html raíz da aplicação. Os outros .htmls que vamos criar, serão adicionados dentro do index.html dentro da tag: ** <app-root> **.
+ `<app-root></app-root>`
+ 
+Através do ** <app-root> ** é que todos os nossos componentes serão carregados. Ele faz referencia ao componente pai  **app/app.component.ts** este é lido dentro de ** app/app.module.ts **
+
+### Primeiro run
+
+1 - Botão esquerdo no nome do projeto e escolha: Open in integrated terminal.
+
+2 - Escreva `ng serve ` para carregar a aplicação.
+
+![img/001.png](https://github.com/aluiziomonteiro/angular/blob/master/img/001.png)
+
+3 - Acesse: localhost:4200/ pelo navegador. O resultado deve ser:
+
+![img/002.png](https://github.com/aluiziomonteiro/angular/blob/master/img/002.png)
+
+Esta é a face da nossa aplicação inicial. Conforme for-mos criando componentes, eles irão aparecendo aqui e as coisas vão se modificando.
+
+
+
+
+
+
+
+
+
 
 
 
