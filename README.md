@@ -180,7 +180,7 @@ ___
 
 ### One-way  e two-way data binding
 
-One way databinding, significa que a view, sua página, só consegue ler o dado (model) disponibilizado pelo controller do AngularJS. É uma relação unidirecional, somente leitura. O two-way data binding você consegue tanto ler quando modificar um model disponibilizado pelo controller.
+One way databinding, significa que a view, sua página, só consegue ler o dado (model) disponibilizado pelo controller do Angular. É uma relação unidirecional, somente leitura. O two-way data binding você consegue tanto ler quando modificar um model disponibilizado pelo controller.
 
 1 - Para uma melhor visualização, vamos adicionar um input com `[ngModel]` que é a forma **One-way** de interligar o input com alguma variável
 
@@ -242,14 +242,109 @@ Para configurar o two-way basta adicionar parenteses dentro do colchetes do [ngM
 
 ![img/005.png](https://github.com/aluiziomonteiro/angular/blob/master/img/005.png)
 
+### Criando Componentes
+
+Vamos começar a criar nossos componentes que farão parte do projeto que é o foco desse tutorial.
+
+1 - Crie uma pasta chamada **courses** dentro da pasta **/app**.
+Nessa pasta vamos colocar todos os componentes que forem referentes aos nossos cursos.
+2 - crie um arquivo com o neme de **course-list-component.ts** dentro de **/courses**.
+Precisamos criar uma classe que represente nossa lista de componentes:
+
+![img/006.png](https://github.com/aluiziomonteiro/angular/blob/master/img/006.png)
+
+3 - Para o angular saber que esta classe é um componente, é preciso ter um **decorator**. Então vamos importar Component:
 
 
+~~~typescript
+import { Component } from "@angular/core";
+// Digite "@" e escolha Component no pop-up que o vscode completa pra gente
+@Component
+export class CourseListComponent{
+
+}
+~~~
+
+4 - Vamos definir o seletor e o template. Podemos definir o template de duas maneiras: pelo path e de forma estática.
+
+~~~typescript
+import { Component } from "@angular/core";
+
+@Component({ // aqui vai algumas características desse componente
+    selector: 'app-course-list', // vai virar uma tag
+    template: '<h2> Course List </h2>', // Definição estática do template
+  })
+export class CourseListComponent{
+
+}
+~~~
+
+5 - No **app/app.component.html** chame a nossa tag **app-course-list**
+
+~~~typescript
+<app-course-list></app-course-list>
+~~~
+
+Nesse momento recebemos um erro informando que o componente não é reconhecido pelo módulo raíz,
+
+` Error: src/app/app.component.html:1:1 - error NG8001: 'app-course-list' is not a known element:`
+
+6 - Vamos declarar o componente no modulo raíz **app/app.module.ts**
 
 
+~~~typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
+import { AppComponent } from './app.component';
+import { CourseListComponent } from './courses/course-list-component';
 
+@NgModule({
+  declarations: [
+    AppComponent,
+    CourseListComponent // Nosso componente
+  ],
+  
+  ...
+  ~~~
 
+Agora sim, nosso H2 é exibido corretamente
 
+![img/007.png](https://github.com/aluiziomonteiro/angular/blob/master/img/007.png)
+
+note: sempre declare os seus componentes no módulo que pertence a ele. Como aqui estamos usando somente o módulo raíz, então é nele que estamos declarando tudo.
+
+Não é legal misturar html com typescript, portanto vamos separa aquele h2 do template?
+
+~~~typescript
+...
+componente
+    selector: 'app-course-list', // vai virar uma tag
+    template: '<h2> Course List </h2>', // Definição estática do template
+ ...
+~~~
+
+ 1 - Crie um arquivo dentro da pasta **app** chamado de **course-list-component.html** e coloque o H2 dentro dele.
+ 
+ ~~~typescript
+ <h2> Course List </h2>
+ ~~~
+ 
+ 2 - Altere o course-list-component.ts para que o templateUrl busque o .html.
+ 
+ ~~~typescript
+ 
+import { Component } from "@angular/core";
+
+@Component({ // aqui vai algumas características desse componente
+    selector: 'app-course-list', // vai virar uma tag
+    templateUrl: './course-list-component.html' // Definição estática do template
+  })
+export class CourseListComponent{
+
+}
+~~~
 
 
 
