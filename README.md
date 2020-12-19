@@ -346,16 +346,194 @@ export class CourseListComponent{
 }
 ~~~
 
+### Instalação do Bootstrap via Node Package Manager
+
+Vamos usar alguns componented do bootstrap no HTML da nossa aplicação e para que isso seja possível,  será preciso instalá-lo via npm.
+
+1 - Clique no terminal do VSCode e dê um CTRL+C para parar a aplicação.
+
+2 - Escreva no terminal do VSCode `npm install bootstrap`
+
+3 - Certifique-se de que dentro da pasta **node-modules**, surgiu uma outra pasta chamada bootstrap.
+
+![img/008.png](https://github.com/aluiziomonteiro/angular/blob/master/img/008.png)
+
+A definição do path do estilo global fica localizado no arquivo angular.json.
+
+![img/009.png](https://github.com/aluiziomonteiro/angular/blob/master/img/009.png)
+
+4 - Importe o css do bootstrap dentro do src/style.css
+
+![img/010.png](https://github.com/aluiziomonteiro/angular/blob/master/img/010.png)
+
+5 - Para testar se o bootstrap está funcionando corretamente, acesse **app/app.component.html** e envolva a tag `<app-course-list></app-course-list>` com uma ´<div class="container">`
+
+![img/011.png](https://github.com/aluiziomonteiro/angular/blob/master/img/011.png)
+
+6 - Rode o ng serve e acesse localhost:4200 pelo brownser.
+
+
+![img/012.png](https://github.com/aluiziomonteiro/angular/blob/master/img/012.png)
+
+Podemos notar que o estilo do bootstrap foi aplicado em nosso título com sucesso.
+
+7 - Crie um arquivo chamado **course.ts** dentro da pasta courses. Defina uma Classe dentro dele:
+
+~~~typescript
+export class Course{
+
+}
+~~~
+ 8- Defina os atributos do nosso curso dentro da classe. A tipagem dos atributos não é obrigatória, mas é interessante para facilitar na leitura e identificação dos dados que cada um precisa receber.
+ 
+ ~~~typescript
+export class Course{
+	id: number;
+    name: string;
+    imageUrl: string;
+    price: number;
+    code: number;
+    releaseData: string;
+    duration: number;
+    rating: number;
+}
+~~~
+
+9 - Na classe **course-list-component.ts, vamos declarar um array de cursos vazio. Use o auto complete quando for escrever o nome da Classe Curso que o VSCode faz o import automático pra gente:
+
+~~~typescript
+import { Component } from "@angular/core";
+import { Course } from "./course";
+
+@Component({ // aqui vai algumas características desse componente
+    selector: 'app-course-list', // vai virar uma tag
+    templateUrl: './course-list-component.html' // Definição estática do template
+  })
+export class CourseListComponent{
+  courses: Course[] = []; // array de Cursos vazio
+}
+~~~
+
+Podemos implementar o OnInit para que algumas operações sejam executadas assim que o componente for inicializado. Estas operações devem ser descritas dentro do método ngOnInit():
+
+~~~typescript
+...
+
+export class CourseListComponent implements OnInit{ // OnInit
+    courses: Course[] = []; // Array de Cursos vazio
+
+    ngOnInit(){ // Método que será executado na inicialização
+
+    }
+}
+~~~
+
+Vamos inicializar nosso componente preenchendo nossa lista de array de Cursos:
+
+~~~typescritp
+...
+    ngOnInit(){ // Método que será executado na inicialização
+      this.courses = [{
+        id: 1,
+        name: 'Angular: Forms',
+        imageUrl: ' ',
+        price: 99.99,
+        code: 'XPS-8796',
+        releaseData: 'November, 2, 2019',
+        duration: 120,
+        rating: 4.5,
+      },
+      {
+        id: 2,
+        name: 'Angular: HTTP',
+        imageUrl: ' ',
+        price: 45.99,
+        code: 'LKL-1094',
+        releaseData: 'December, 4, 2019',
+        duration: 80,
+        rating: 4,
+      }
+    ]
+    }
+}
+~~~
+
+10 - Vamos exibir a lista de cursos no nosso template html, no caso é o **course-list-component.html:
+
+
+~~~typescript
+<h4>Course List</h4>
+
+<table class="table table-striped"> // Tabela do bootstrap
+    <thead>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Code</th>
+        <th>Release Data</th>
+        <th>Rating</th>
+        <th>Options</th> // Futuramente teremos lindos botões aqui
+    </thead>
+
+    <tbody>
+     
+    </tbody>
+</table>
+~~~
+
+11 - Vamos iterar sobre as informações dos cursos e para isso, vamos utilizar o *ngFor do angular dentro da tag `<tr>`:
+
+~~~typescript
+<h4>Course List</h4>
+
+<table class="table table-striped">
+    <thead>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Code</th>
+        <th>Release Data</th>
+        <th>Rating</th>
+        <th>Options</th> 
+    </thead>
+
+    <tbody>
+        <!-- let "variável-de-template" of "nossa-lista-de-cursos"-->
+        <tr *ngFor="let course of courses">
+            <td>{{ course.imageUrl }}</td> <!-- Interpolação -->
+            <td>{{ course.name }}</td>
+            <td>{{ course.price  }}</td>
+            <td>{{ course.code }}</td>
+            <td>{{ course.releaseData }}</td>
+            <td>{{ course.rating }}</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+~~~
+
+
+O resultado já pode ser visto a seguir:
 
 
 
+![img/013.png](https://github.com/aluiziomonteiro/angular/blob/master/img/013.png)
+
+Revisando:
+
+1 - Criamos um novo componente
+2 - Criamos uma classe que represent os valores que queremos exibir
+3 - Criamos e populamos um array com o mesmo tipo dessa classe
+4 - Vimos o método `ngOnInit()` que é executado no momento em que o componente é carregado
+5 - Vimos que podemos criar uma classe de modelo com typeScript e que podemos tipar nossos atributos
+6 - Vimos que quando criar-mos um novo componente devemos declará-lo no módulo raíz da aplicação ** app.module**
+7 - Exportamos o módulo do bootstrap
+como exibir nossa lista no browser utilizando o ** *ngFor**
 
 
+VIsão global do projeto:
 
-
-
-
-
+![img/DIagrama1.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama1.png)
 
 
 
