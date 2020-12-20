@@ -50,18 +50,18 @@ ___
 
 ### Estrutura do projeto "Visão geral"
 
- * **package.json: ** contém todas as dependências da nossa aplicação. Quando instalamos uma dependência, ela automaticamente vai aparecer aqui.
+ * **package.json:** contém todas as dependências da nossa aplicação. Quando instalamos uma dependência, ela automaticamente vai aparecer aqui.
  
- * **angular.json: ** contém configurações globais da aplicação e qual é o arquivo que vai inicializar a nossa aplicação. 
+ * **angular.json:** contém configurações globais da aplicação e qual é o arquivo que vai inicializar a nossa aplicação. 
  
-	* **assets** path das pastas de imagens e arquivos estáticos globais.
-	* **styles** path do .css global.
+	* **assets:** path das pastas de imagens e arquivos estáticos globais.
+	* **styles:** path do .css global.
 	
-	* **scripts** path do .js global. 
+	* **scripts:** path do .js global. 
 	
-	* **index** path da página base. "No caso do angular, tudo é envelopado aqui dentro, direta ou indiretamente."
+	* **index:** path da página base. "No caso do angular, tudo é envelopado aqui dentro, direta ou indiretamente."
 	
-	* **main** path da pasta coração da parada, responsável por fazer o bootstrap da aplicação, "hook."
+	* **main:** path da pasta coração da parada, responsável por fazer o bootstrap da aplicação, "hook."
  
  * **node_modules:** contém as dependências da aplicação.
  * **src:** é onde você vai codar. 
@@ -70,10 +70,11 @@ ___
  	
  	* **main.ts:** inicializa a nossa aplicação. O main espera receber um módulo raiz para fazer o processo de leitura e inicialização da aplicação "bootstrap". Este módulo é o "appmodule" que fica em: app.module.ts.
 
- * ** app/app.module.ts:** vai ser lido pelo main.ts e a partir dele é que será lido o componente pai "componente responsável por envelopar todos os outros componentes que vamos criar de maneira direta ou indireta". Este componente será lido e carregado dentro do index.html, que é o html raiz da aplicação. Os outros .htmls que vamos criar, serão adicionados dentro do index.html dentro da tag: ** <app-root> **.
+ * ** app/app.module.ts:** vai ser lido pelo main.ts e a partir dele é que será lido o componente pai "componente responsável por envelopar todos os outros componentes que vamos criar de maneira direta ou indireta". Este componente será lido e carregado dentro do index.html, que é o html raiz da aplicação. Os outros .htmls que vamos criar, serão adicionados dentro do index.html dentro da tag: 
+ **<app-root>**.
  `<app-root></app-root>`
  
-Através do ** <app-root> ** é que todos os nossos componentes serão carregados. Ele faz referencia ao componente pai  **app/app.component.ts** este é lido dentro de ** app/app.module.ts**.
+Através do **<app-root>** é que todos os nossos componentes serão carregados. Ele faz referencia ao componente pai  **app/app.component.ts** este é lido dentro de **app/app.module.ts**.
 
 ### Primeiro run
 
