@@ -12,7 +12,8 @@ export class CourseListComponent implements OnInit{ // OnInit
       this.courses = [{
         id: 1,
         name: 'Angular: Forms',
-        imageUrl: ' ',
+        // O acesso a pasta assets já está global no angular.json
+        imageUrl: '/assets/images/forms.png',
         price: 99.99,
         code: 'XPS-8796',
         releaseData: 'November, 2, 2019',
@@ -22,7 +23,7 @@ export class CourseListComponent implements OnInit{ // OnInit
       {
         id: 2,
         name: 'Angular: HTTP',
-        imageUrl: ' ',
+        imageUrl: '/assets/images/http.png',
         price: 45.99,
         code: 'LKL-1094',
         releaseData: 'December, 4, 2019',
