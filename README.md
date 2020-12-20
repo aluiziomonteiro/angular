@@ -32,6 +32,7 @@ ___
  * Criar Guards.
 
 3 - Instalação [VSCode.deb](https://code.visualstudio.com/download)
+___
 
 ### Criando a base do projeto:
 1 - Abra o terminal e navegue até a pasta onde o projeto será criado.
@@ -47,6 +48,7 @@ ___
  * A folha de estilo será em .css.
 
 3 - Abra o diretório do projeto pelo VSCode, ou digite "code ." no terminal, dentro da pasta do projeto.
+___
 
 ### Estrutura do projeto "Visão geral"
 
@@ -70,11 +72,12 @@ ___
  	
  	* **main.ts:** inicializa a nossa aplicação. O main espera receber um módulo raiz para fazer o processo de leitura e inicialização da aplicação "bootstrap". Este módulo é o "appmodule" que fica em: app.module.ts.
 
- * ** app/app.module.ts:** vai ser lido pelo main.ts e a partir dele é que será lido o componente pai "componente responsável por envelopar todos os outros componentes que vamos criar de maneira direta ou indireta". Este componente será lido e carregado dentro do index.html, que é o html raiz da aplicação. Os outros .htmls que vamos criar, serão adicionados dentro do index.html dentro da tag: 
+ * **app/app.module.ts:** vai ser lido pelo main.ts e a partir dele é que será lido o componente pai "componente responsável por envelopar todos os outros componentes que vamos criar de maneira direta ou indireta". Este componente será lido e carregado dentro do index.html, que é o html raiz da aplicação. Os outros .htmls que vamos criar, serão adicionados dentro do index.html dentro da tag: 
  **<app-root>**.
  `<app-root></app-root>`
  
 Através do **<app-root>** é que todos os nossos componentes serão carregados. Ele faz referencia ao componente pai  **app/app.component.ts** este é lido dentro de **app/app.module.ts**.
+___
 
 ### Primeiro run
 
@@ -143,6 +146,7 @@ export class AppComponent {
   title = 'course-manager';
 }
 ~~~
+___
 
 ### Interpolação
 
@@ -242,6 +246,7 @@ Para configurar o two-way basta adicionar parenteses dentro do colchetes do [ngM
 `<input [(ngModel)] = "name" name="name" >`:
 
 ![img/005.png](https://github.com/aluiziomonteiro/angular/blob/master/img/005.png)
+___
 
 ### Criando Componentes
 
@@ -346,6 +351,7 @@ export class CourseListComponent{
 
 }
 ~~~
+___
 
 ### Instalação do Bootstrap via Node Package Manager
 
@@ -459,7 +465,7 @@ Vamos inicializar nosso componente preenchendo nossa lista de array de Cursos:
 }
 ~~~
 
-10 - Vamos exibir a lista de cursos no nosso template html, no caso é o **course-list-component.html:
+10 - Vamos exibir a lista de cursos no nosso template html, no caso é o **course-list-component.html**:
 
 
 ~~~typescript
