@@ -805,20 +805,151 @@ Recapitulando:
 
 3 - Para se passar o valor de uma variável de template ou de um componente para o template, é preciso colocá-la dentro de colchetes.
 
-
-Visão Geral:
+Visão Geral do Projeto:
 
 ![img/Diagrama2.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama2.png)
-        
+
+[Código do Projeto](https://github.com/aluiziomonteiro/angular/tree/3c2f63017e2ffb4ac572ad00732a7dbe16d7d339)
+___
+___
+
+#  Angular 8 - Lidando com Vários Componentes
+___
+___
+
+### O que é Injeção de Dependências
+
+Veremos agora o que é Injeção de Dependência, alguns recursos e facilidades que ela nos trás.
+
+1 - Crie um arquivo chamado **course-service.ts** dentro da pasta **courses**.
+
+2 - Crie o código da classe **course-service.ts**:
+
+~~~typescript
+export class CourseService {
+}
+~~~
+
+3 - Copie somente o array que está [neste arquivo](https://github.com/aluiziomonteiro/angular/blob/master/files/course-service.ts) e cole-o abaixo da classe **course-service.ts**:
+
+4 - Importe a classe Curso: "CTRL+." em seguida pressione "Enter" duas vezes:
+
+![img/020.png](https://github.com/aluiziomonteiro/angular/blob/master/img/020.png)
+
+Vishe! Vamos organizar esses erros:
+
+Obs 01: Altere todas as ocorrências da variável **releaseData** para **releaseDate**. Ela foi citada em todos os arquivos que estão na pasta **courses**.
+
+Obs 02: Crie o atributo **description** na classe de modelo **course.ts**.
+
+Obs 03: No componente **course-list-component.ts**, adicione as seguintes descrições:
+
+ * **Para o id = 1:** `description: 'Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis no módulo de Forms.',`.
+
+ * **Para o id = 2:** `description: 'Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis no módulo de HTTP.',`.
+
+![img/021.png](https://github.com/aluiziomonteiro/angular/blob/master/img/021.png)
+
+Obs 04: Ajuste o template para exibir as alterações feitas corretamente:
+
+![img/022.png](https://github.com/aluiziomonteiro/angular/blob/master/img/022.png)
+
+Reinicie o server e teste a application:
+
+![img/023.png](https://github.com/aluiziomonteiro/angular/blob/master/img/023.png)
+
+Agora podemos continuar com a Injeção.
+
+5 - Na classe **course-service.ts**, use um **decorator** para informar ao angular que esta classe é elegível para ser uma injeção de dependências. O atributo **providedIn** vai especificar o lugar que a classe será injetada:
+
+~~~typescript
+
+import { Injectable } from "@angular/core";
+import { Course } from "./course";
+
+@Injectable({ // Determina que esta classe fornece um injetável
+    providedIn: 'root' // Local que será injetado 
+})
+
+export class CourseService {
+
+...
+~~~
+
+ProvidedIn pode assumir três valores:
+* **root:** Carregado junto com o módulo raiz da aplicação.
+
+* **platform:** Injetor compartilhado por todos as páginas de um aplicativo.
+
+* **any:** Fornece uma instancia única em cada módulo.
+
+[Angular - Injectable](https://angular.io/api/core/Injectable)
+
+6 - Crie um método para trazer todos os nossos cursos cadastrados:
+
+~~~typescript
+...
+export class CourseService {
+
+    retrieveAll(): Course[]{ // Retorna o nosso array de cursos
+        return COURSES;
+    }
+
+}
+...
+~~~
+
+Obs: Evite criar variáveis comuns em classes de serviço. Quando o angular carrega o módulo raiz, ele cria uma instância do nosso objeto e sai por aí replicando conforme for as referências. Variáveis comuns criadas aqui serão replicadas, ocupando memória sem uma real necessidade. Portanto, tenha somente métodos e variáveis estáticas dentro de suas services.
+
+Vamos injetar nossa dependência **course-service.ts** dentro do componente **course-list-component.ts**:
+
+7 - Apague o array da classe **course-list-component.ts**:
+
+~~~typescript
+import { Component, OnInit } from "@angular/core";
+import { Course } from "./course";
+
+@Component({ 
+    selector: 'app-course-list',
+    templateUrl: './course-list-component.html' 
+  })
+export class CourseListComponent implements OnInit{ // OnInit
+    courses: Course[] = []; // Array de Cursos vazio
+
+    ngOnInit(){ // Método que será executado na inicialização
+    
+    }
+}
+~~~
+
+Quando o angular carregar a nossa aplicação, ele carregará também o nosso **course-service.ts** entendendo que o mesmo está elegível para a injeção de dependências por causa da anotação **@Injectable** e quando o angular perceber que temos um construtor, que é do mesmo tipo do objeto elegível, o angu injeta o objeto no construtor.
+
+8 - Declare um construtor para que a classe possa receber a dependências:
+
+![img/024.png](https://github.com/aluiziomonteiro/angular/blob/master/img/024.png)
+
+9 - Por fim, vamos igualar nosso array com o array que vem da classe de service:
+
+~~~typescript
+...
+export class CourseListComponent implements OnInit{ 
+    courses: Course[] = []; 
+
+    constructor (private courseService: CourseService){
+        this.courses = this.courseService.retrieveAll(); // Array da classe service
+    }
+    ngOnInit(){ 
+    
+    }
+}
+~~~
+
+Teste a aplicação:
+
+![img/025.png](https://github.com/aluiziomonteiro/angular/blob/master/img/025.png)
 
 
-
-
-
-
-
-
-
+![img/Diagrama3.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama3.png)
 
 
 
