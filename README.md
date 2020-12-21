@@ -9,6 +9,7 @@ ___
 
  * HTML Básico.
  * JS Básico.
+ * Bootstrap Básico.
 
 ### Ambiente
 
@@ -951,11 +952,196 @@ Teste a aplicação:
 
 ![img/Diagrama3.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama3.png)
 
+___
+
+### Tratando Eventos com Data Binding
+
+Vamos compreender um pouco mais sobre os recursos de **Two-Way Data Binding**, como ele funciona internamente e ainda vamos utilizar algumas hooks para facilitar algumas operações que faremos de forma dinâmica.
+
+Vamos criar um input para filtrar cursos.
+
+1 - Crie um label e um input dentro do template **course-list-component.thml**. Aqui vamos envolver estes elementos com divs para poder estilizá-los com as classes do Bootstrap:
+
+~~~typescript
+<h4>Course List</h4>
+
+<div class="form-group row">
+    
+    <label class="col-sm-2 col-form-label" for="">Filter by</label>
+
+    <div class="col-sm-10">
+        <input type="text" name="" class="form-control">
+    </div>
+
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <th>Image</th>
+
+...
+~~~
+
+Podemos ver que nosso layout já está agradável:
+
+![img/026.png](https://github.com/aluiziomonteiro/angular/blob/master/img/026.png)
+
+Quando precisarmos fazer alguma referência com Two-Way Data Binding, utilizaremos a seguinte sintaxe: `[(ngModel)]=""`. Dentro das aspas duplas nós informamos o nome do atributo que queremos linkar. Vamos chamá-la de `"filter"`.
+
+~~~typescript
+<h4>Course List</h4>
+
+<div class="form-group row">
+    
+    <label class="col-sm-2 col-form-label" for="">Filter by</label>
+
+    <div class="col-sm-10">
+        <input [(ngModel)]="filter" class="form-control">
+    </div>
+
+</div>
+
+<table class="table table-striped">
+...
+~~~
+
+Agora é preciso definir o que é `"filter"` dentro do componente **course-list-component.ts**. Além disso vai ser preciso criar dois eventos: Um de entrada e outro de saída de informações:
+
+2 - Crie uma string chamada `_filterBy`: O underline é para informar para outros desenvolvedores de que a variável só está sendo utilizada ali e que ela não deve ser alterada.
+
+~~~typescript
+export class CourseListComponent implements OnInit{ 
+    courses: Course[] = []; 
+
+    _filterBy: string;
+...
+~~~
+
+3 - Crie um método `set filter()` que recebe uma string como parâmetro dentro do componente:
+
+~~~typescript
+...
+    ngOnInit(){ 
+    
+    }
+
+    set filter(value: string) {
+
+    }
+
+}
+~~~
+
+4 - Dentro do método `filter()`, iguale o `_filterBy` com `value`
+
+~~~typescript
+...
+    ngOnInit(){ 
+    
+    }
+
+    set filter(value: string) {
+      this._filterBy = value;
+    }
+
+}
+~~~
+
+5 - Vamos criar também um `get filter()` que será usado quando o componente for atualizado. Este método retorna `filterBy`: 
+
+~~~typescript
+...
+    set filter(value: string) {
+      this._filterBy = value;
+    }
+
+    // Usado quando o componente for atualizado
+    get filter() {
+      return this._filterBy;
+    }
+}
+~~~
+
+6 - Passe o miolo do construtor: `this.courses = this.courseService.retrieveAll();` para dentro do `ngOnInit()`.:
+
+~~~typescript
+...
+    _filterBy: string;
+
+    constructor (private courseService: CourseService){}
+
+    ngOnInit(){ 
+      // Cursos que vão ser filtrados
+      this.courses = this.courseService.retrieveAll();
+    }
+
+...
+   ~~~
+
+A ideia é que o `this.curso` vai ser filtrado conforme as letras estão sendo digitadas no input. Precisamos ajustar mais algumas coisinhas:
+
+1 - Vamos avisar para os outros desenvolvedores de que o array de cursos é intocável. Use underline:
+`_courses: Course[] = [];`
+
+2 - Coloque underline em `this._courses` dentro do `ngInit()`.
+
+3 - Crie um array vazio chamado `filteredCourses`:
+
+~~~typescript
+...
+export class CourseListComponent implements OnInit{ 
+
+    filteredCourses: Course[] = [];
+    
+    _courses: Course[] = []; 
+...
+~~~
+
+4 - Agora, no momento da inicialização do nosso componente em `ngOnInit()`, iguale `filteredCourses` com `_courses`:
+
+~~~typescript
+...
+    ngOnInit(){ 
+      // This curso será filtrado baseado no que for digitado no input
+      this._courses = this.courseService.retrieveAll();
+      this.filteredCourses = this._courses;
+    }
+...
+~~~
+
+5 - Agora faremos com o que `filteredCourses` receba um array de cursos filtrados dentro do método `set filter()`:
+
+~~~typescript
+...
+   // Usado quando digitarmos no input
+    set filter(value: string) {
+      this._filterBy = value;
+
+      this.filteredCourses = this._courses.filter((course: Course) => 
+      course.name.toLocaleLowerCase().indexOf(this._filterBy.toLocaleLowerCase()) > -1);
+    }
+...
+~~~
+
+Destrinchando o código acima, temos:
+
+![img/027.png](https://github.com/aluiziomonteiro/angular/blob/master/img/027.png)
+
+Agora o nosso template não vai mais iterar `cursos`. Vamos trabalhar com `filteredCourses`.
+
+6 - Vá para a table do template e itere em `filteredCourses`:
+
+![img/028.png](https://github.com/aluiziomonteiro/angular/blob/master/img/028.png)
+
+Neste momento, nosso filtro deve estar funcionando maravilhosamente bem:
+
+![img/029.png](https://github.com/aluiziomonteiro/angular/blob/master/img/029.png)
 
 
+Até aqui, fizemos uma comunicação de duas vias, onde temos a união de um método que lê mais um outro de input: **Two-Way Data Binding**. 
 
-
-
+Este é um recurso interessante e nós podemos utilizá-lo para outros fins conforme for a nossa criatividade e necessidade.
+___
 
 
 
