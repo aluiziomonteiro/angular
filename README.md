@@ -9,7 +9,7 @@ Este material é uma transcrição modificada de uma das disciplinas que compõe
 
 Aula ministrada por: Wesllhey Holanda
 
-Transcrito e modificações: Aluizio Monteiro
+Transcrito e modificado por: Aluizio Monteiro
 
 [Everis |]( https://www.everis.com/)
 [ DIO |](https://www.linkedin.com/school/digitalinnovation-one/about/)
