@@ -3,13 +3,13 @@
 ___
 ___
 
-###### Digital Innovation One
+### Digital Innovation One
 
-Este material é uma transcrição modificada de uma das disciplinas que compõem o Bootcamp da Everis, oferecido por: Digital Innovation One.
+###### *(Este material é uma transcrição modificada de uma das disciplinas que compõem o Bootcamp da Everis, oferecido por: Digital Innovation One).*
 
-Aula ministrada por: Wesllhey Holanda
+* ###### *Aula ministrada por: Wesllhey Holanda*
 
-Transcrito e modificado por: Aluizio Monteiro
+* ###### *Transcrito e modificado por: Aluizio Monteiro*
 
 [Everis |]( https://www.everis.com/)
 [ DIO |](https://www.linkedin.com/school/digitalinnovation-one/about/)
