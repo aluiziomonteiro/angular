@@ -1282,13 +1282,13 @@ ___
 ### Protegendo Rotas com Guards
 
 
-Permitem a navegaçao entre os componentes da aplicação.
+Permitem a navegação entre os componentes da aplicação.
 
 Vamos criar um componente para representar uma **NavBar**:
 
 1 - Crie o arquivo **nav-bar.component.ts** dentro de **app/nav-bar/**.
 
-2 - no arquivo, crie uma classe chamada `NavBarComponent`:
+2 - No arquivo, crie uma classe chamada `NavBarComponent`:
 
 ~~~typescript
 export class NavBarComponent{
@@ -1312,7 +1312,7 @@ export class NavBarComponent{
 
 4 - Crie o template para este component na pasta que pertence a ele, isto é, **app/nav-bar/**. O template é um .html com o mesmo nome do component: **nav-bar.component.html**.
 
-5 - aqui não vamos tratar das tags que compoem esta nav-bar, portanto, cole o conteúdo deste [arquivo](https://github.com/aluiziomonteiro/angular/blob/master/files/nav-bar.component.odt) dentro do template.
+5 - aqui não vamos tratar das tags que compõem esta nav-bar, portanto, cole o conteúdo deste [arquivo](https://github.com/aluiziomonteiro/angular/blob/master/files/nav-bar.component.odt) dentro do template.
 
 6 - Declare o componente de navbar dentro do **app.component.html**, pois ele é quem é o template da nossa página:
 
@@ -1353,10 +1353,151 @@ Temos um erro informando que o nosso componente  não foi encontrado. Isso porqu
 ...
 ~~~
 
-Agora temos isto:
+Agora sim temos isto:
 
 ![img/Diagrama6.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama6.png)
 
 9 - Reinicie o servidor e veja o resultado no browser:
 
 ![img/034.png](https://github.com/aluiziomonteiro/angular/blob/master/img/034.png)
+
+Vamos criar a nossa primeira rota.
+
+1 - Abra o **app.module.ts** e veja nossa parte de imports:
+
+![img/035.png](https://github.com/aluiziomonteiro/angular/blob/master/img/035.png)
+
+Todos os módulos que formos importar, vamos utilizar o módulo de imports.
+
+2 - Importe o pacote de rotas do angular **RouterModule**;
+
+~~~typescript
+...
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+
+import { RouterModule } from '@angular/router'; // Módulo de Rotas
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    CourseListComponent, 
+    StarComponent, 
+    ReplacePipe, 
+    NavBarComponent 
+  ],
+  imports: [
+    BrowserModule, 
+    FormsModule,
+    RouterModule // Módulo de Rotas
+  ],
+...
+~~~
+
+3 - Para que o angular carregue nossa aplicação na inicialização, vamos utilizar a declaração: **RouterModule.forRoot([])**
+
+O **forRoot([])** espera receber um array de rotas.
+Vamos declarar todas as rotas da nossa aplicação dentro dele.
+
+4 - Configure uma rota da seguinte maneira:
+
+~~~typescript
+...
+    RouterModule.forRoot([
+      {
+        path: '', redirectTo: 'courses', pathMatch: 'full'
+      }
+    ])
+  ],
+...
+~~~
+Primeiro o caminho, que é uma rota vazia. Essa será a rota inicial do aplicativo. Depois temos o redirecionamento, que alterará nosso caminho para **courses** ao encontrar a rota vazia. Depois, temos o pathMatch. Não detalharemos muito. Basta saber que isso fará a rota vazia casar nosso redirecionamento.
+
+5 - Crie outro objeto que corresponda a nossa rota de listagem de cursos:
+
+~~~typescript
+...
+imports: [
+    BrowserModule, 
+    FormsModule,
+    RouterModule.forRoot([
+      {
+        path: '', redirectTo: 'courses', pathMatch: 'full'
+      },
+      { // quando for escrito "courses" na url do browser vai ser acessado o componente "CourseListComponent"
+        path: 'courses', component: CourseListComponent
+      }
+    ])
+...
+~~~
+
+Como estamos usando rotas, agora não faz mais sentido utilizarmos seletores para acessar nossas páginas. Quem vai acessar as páginas agora é o caminho digitado na url do browser.
+O uso do selector é ideal para adicionarmos componentes dentro de outros componentes.
+
+6 - Vá para o componente **course-list-component.ts** e retire o `selector`:
+
+![img/036.png](https://github.com/aluiziomonteiro/angular/blob/master/img/036.png)
+
+7 - Retire a as tags: `<app-course-list></app-course-list>` de **app.component.html**.
+
+Precisamos informar ao angular onde esta troca "switch" será realizada. No caso específico desta aplicação, esta troca será feita na div container do **app.component.html** com o selector de `router-outlet`:
+
+~~~typescript
+<app-nav-bar> </app-nav-bar>
+
+<div class="container">
+	// Avisa ao angular que quando uma rota for modificada, o resultado será carregado aqui.
+    <router-outlet></router-outlet>
+</div>
+~~~
+
+A partir deste momento, não estamos mais trabalhando com `selectors` e sim com `routers`:
+
+
+![img/037.png](https://github.com/aluiziomonteiro/angular/blob/master/img/037.png)
+
+O Angular possui duas rotas padrão:
+
+a) `''` - É a rota padrão `localhost:4200/`; e
+b) `**` - É quando ele não encontra a rota informada na url.
+
+Vamos criar mais algumas rotas padrões do Angular.
+
+1 - Crie um novo componente chamado de **error-404.component.ts** dentro de **app/error-404/**:
+
+~~~typescript
+import { Component } from "@angular/core";
+
+@Component({
+    templateUrl: './error-404.component.html'
+})
+export class Error404Component {
+    
+}
+~~~
+
+2 - Crie o template dele na mesma pasta:
+
+![img/038.png](https://github.com/aluiziomonteiro/angular/blob/master/img/038.png)
+
+3 - Defina nosso novo componente em **app.module.ts**.
+
+4 - Passe o componente na Url de erro:
+
+![img/039.png](https://github.com/aluiziomonteiro/angular/blob/master/img/039.png)
+
+5 - Teste alguma url estranha no browser:
+
+
+![img/040.png](https://github.com/aluiziomonteiro/angular/blob/master/img/040.png)
+
+Qualquer rota digitada, que não existir em nossa aplicação, será redirecionada para esta página de erro.
+
+Conclusão:
+
+* O Angular disponibiliza duas rotas predefinidas que podemos usar: rota padrão e rota inexistente.
+
+* Podemos criar nossas próprias rotas, como foi o caso da rota `courses` que redireciona para `CourseListComponent`.
+
+* Quando trabalhamos com rotas, não faz sentido utilizar `selector`.
+
+* Importante informar ao Angular, onde a troca de componentes será realizada com `<router-outlet></router-outlet>` que é o responsável por fazer esta troca.
