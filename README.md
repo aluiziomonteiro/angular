@@ -1458,6 +1458,7 @@ A partir deste momento, não estamos mais trabalhando com `selectors` e sim com 
 O Angular possui duas rotas padrão:
 
 a) `''` - É a rota padrão `localhost:4200/`; e
+
 b) `**` - É quando ele não encontra a rota informada na url.
 
 Vamos criar mais algumas rotas padrões do Angular.
