@@ -1157,10 +1157,117 @@ Este é um recurso interessante e nós podemos utilizá-lo para outros fins conf
 ___
 
 
+### Transformando informações com pipes
+
+* Altera a forma que um dado é exibido em nosso template.
+Sintaxe:  `| name:'padrão``.
+
+* Pipes personalizados.
+
+* Pipes default do Angular.
+
+* Aceita concatenação de pipes.
+
+1 - Abra o **course-list-component.ts**.
+
+2 - Adicione um pipe para formatar a data e outro para transformar as letras do código em minúsculas da seguinte forma:
+
+~~~typescript
+...
+ <tbody>
+        <tr *ngFor="let course of filteredCourses">
+            <td> <img [src]="course.imageUrl" width="40" height="40"> </td>
+            <td>{{course.name}}</td>
+            <td>{{course.price}}</td>
+            <td>{{course.code | lowercase}}</td>
+            <td>{{course.description}}</td> 
+            <td>{{course.releaseDate | date: 'dd/mm/yyyy'}}</td> 
+            <td>
+...
+~~~
+
+
+![img/030.png](https://github.com/aluiziomonteiro/angular/blob/master/img/030.png)
 
 
 
+[Pipes Angular](https://angular.io/guide/pipes)
 
+Vamos criar um pipe que transforma o traço **"-"** do código em um espaço em branco:
+
+1 - Crie um arquivo chamado: **replace.pipe.ts** dentro da pasta `app/pipe/`.
+
+2 - Crie uma classe exportável chamada **ReplacePipe** e adicione um decorator para indicar que ela é um **pipe**:
+
+~~~typescript
+
+import { Pipe } from "@angular/core";
+
+@Pipe({
+
+})
+
+export class ReplacePipe {
+
+}
+~~~
+
+3 - Defina um nome para o pipe no decorator. Este nome será usado para invocar o nosso pipe:
+
+~~~typescript
+
+@Pipe({
+    name: 'replace'
+})
+~~~
+
+4 - Implemente a interface PipeTransform, pois dentro dela nós temos o método `transform()`, que será usado para fazer uma transformação.
+
+* O primeiro será uma string que corresponde ao valor do nosso campo `code`.
+
+* O segundo parâmetro será o carácter que vamos modificar.
+
+* O terceiro parâmetros será o valos depois de ser atualizado.
+
+5 - Precisamos retornar o valor que será substituído e o valor substituidor:
+
+~~~typescript
+import { Pipe, PipeTransform } from "@angular/core";
+
+@Pipe({
+    name: 'replace'
+})
+
+export class ReplacePipe implements PipeTransform{
+
+    transform(value: string, char: string, valueToReplace: string) {
+        return value.replace(char, valueToReplace);
+    }
+}
+
+~~~
+
+Nosso pipe está criado.
+Agora vamos chamá-lo dentro do nosso component.
+
+1 - Abra o arquivo **course-list-component.ts** e concatene o pipe para o campo code:
+
+`<td>{{course.code | lowercase | replace: '-'; ' '}}</td>`
+
+
+Nosso pipe não foi encontrado porque é preciso fazer com que ele seja carregado no início da nossa aplicação:
+
+![img/031.png](https://github.com/aluiziomonteiro/angular/blob/master/img/031.png)
+
+2 - Declare o nosso `replace` dentro do **app.module** para que ele possa ser carregado no início da nossa aplicação:
+
+![img/032.png](https://github.com/aluiziomonteiro/angular/blob/master/img/032.png)
+
+Não ficou mais bonito do que estava antes, mas o objetivo é demostrar como podemos criar nossos pipes e concatená-los.
+
+![img/033.png](https://github.com/aluiziomonteiro/angular/blob/master/img/033.png)
+
+Pipe são muito utilizados. Sempre que quisermos alterar a formatação de informações em nossos templates, devemos pensar em pipes.
 
 
 
