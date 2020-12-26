@@ -850,7 +850,7 @@ export class CourseService {
 
 ![img/020.png](https://github.com/aluiziomonteiro/angular/blob/master/img/020.png)
 
-Vishe! Vamos organizar esses erros:
+Vishe! Vamos organizar estes erros:
 
 Obs 01: Altere todas as ocorrências da variável **releaseData** para **releaseDate**. Ela foi citada em todos os arquivos que estão na pasta **courses**.
 
@@ -1157,10 +1157,14 @@ Este é um recurso interessante e nós podemos utilizá-lo para outros fins conf
 ___
 
 
+
+
+
+
 ### Transformando informações com pipes
 
 * Altera a forma que um dado é exibido em nosso template.
-Sintaxe:  `| name:'padrão``.
+Sintaxe:  `| name:'padrão'`.
 
 * Pipes personalizados.
 
@@ -1269,7 +1273,90 @@ Não ficou mais bonito do que estava antes, mas o objetivo é demostrar como pod
 
 Pipe são muito utilizados. Sempre que quisermos alterar a formatação de informações em nossos templates, devemos pensar em pipes.
 
+Visão Geral dos Arquivos
 
 
+![img/Diagrama4.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama4.png)
+___
+
+### Protegendo Rotas com Guards
 
 
+Permitem a navegaçao entre os componentes da aplicação.
+
+Vamos criar um componente para representar uma **NavBar**:
+
+1 - Crie o arquivo **nav-bar.component.ts** dentro de **app/nav-bar/**.
+
+2 - no arquivo, crie uma classe chamada `NavBarComponent`:
+
+~~~typescript
+export class NavBarComponent{
+    
+}
+~~~
+
+3 - Como ela é um component, coloque um decorator de component nela para que seja possível definir um seletor e um template:
+
+~~~typescript
+import { Component } from "@angular/core";
+
+@Component({ 
+    selector: 'app-nav-bar', 
+    templateUrl: './nav-bar.component.html'
+})
+export class NavBarComponent{
+    
+}
+~~~
+
+4 - Crie o template para este component na pasta que pertence a ele, isto é, **app/nav-bar/**. O template é um .html com o mesmo nome do component: **nav-bar.component.html**.
+
+5 - aqui não vamos tratar das tags que compoem esta nav-bar, portanto, cole o conteúdo deste [arquivo](https://github.com/aluiziomonteiro/angular/blob/master/files/nav-bar.component.odt) dentro do template.
+
+6 - Declare o componente de navbar dentro do **app.component.html**, pois ele é quem é o template da nossa página:
+
+~~~typescript
+<app-nav-bar></app-nav-bar> // Navbar
+
+<div class="container">
+    <app-course-list></app-course-list>
+</div>
+~~~
+
+Aproveite que está no **app.component.html** e dê uma melhorada no layout da nossa lista:
+
+~~~typescript
+...
+<div class="container mt-4">
+    <app-course-list></app-course-list>
+</div>
+~~~
+7 - Reinicie o server.
+
+Temos um erro informando que o nosso componente  não foi encontrado. Isso porque, teste momento, a nossa aplicação está assim:
+
+![img/Diagrama5.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama5.png)
+
+8 - Precisamos declarar nosso navbar em **app.module.ts** para que ele seja carregado junto com a aplicação:
+
+~~~typescript
+...
+@NgModule({
+  declarations: [
+    AppComponent,
+    CourseListComponent, 
+    StarComponent, 
+    ReplacePipe, 
+    NavBarComponent // Navbar
+  ],
+...
+~~~
+
+Agora temos isto:
+
+![img/Diagrama6.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama6.png)
+
+9 - Reinicie o servidor e veja o resultado no browser:
+
+![img/034.png](https://github.com/aluiziomonteiro/angular/blob/master/img/034.png)
