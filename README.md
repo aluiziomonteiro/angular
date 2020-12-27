@@ -1334,7 +1334,7 @@ Aproveite que está no **app.component.html** e dê uma melhorada no layout da n
 ~~~
 7 - Reinicie o server.
 
-Temos um erro informando que o nosso componente  não foi encontrado. Isso porque, teste momento, a nossa aplicação está assim:
+Temos um erro informando que o nosso componente  não foi encontrado. Isso porque, neste momento, a nossa aplicação está assim:
 
 ![img/Diagrama5.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama5.png)
 
@@ -1502,3 +1502,199 @@ Conclusão:
 * Quando trabalhamos com rotas, não faz sentido utilizar `selector`.
 
 * Importante informar ao Angular, onde a troca de componentes será realizada com `<router-outlet></router-outlet>` que é o responsável por fazer esta troca.
+
+### Ativando Rotas Através de Links e de Componentes
+
+Vamos criar botões para acessar informações sobre os nossos cursos.
+
+1 - Abra **course-list-component.html** e na tag `<td>`, que corresponde aos options, vamos criar um link com a propriedade `[routerLink]=""`. Esta propriedade do Angular, espera um array de links o quais queremos acessar.
+
+2 - Passe para o `[routerLink]` a Url que vamos acessar e o id correspondente ao curso. Este id aqui é um **Path Variable**:
+
+~~~typescript
+...
+<tbody>
+        <tr *ngFor="let course of filteredCourses">
+            <td> <img [src]="course.imageUrl" width="40" height="40"> </td>
+            <td>{{course.name}}</td>
+            <td>{{course.price}}</td>
+            <td>{{course.code | lowercase | replace: '-': ' '}}</td>
+            <td>{{course.description}}</td> 
+            <td>{{course.releaseDate | date: 'dd/mm/yyyy'}}</td> 
+            <td>
+                <app-star [rating]="course.rating"> </app-star>
+            </td>
+            <td> <!--Options-->
+                <a [routerLink]="['/courses/info', course.id]" class="btn btn-primary" >Edit</a> 
+            </td>
+        </tr>
+    </tbody>
+</table>
+~~~
+
+
+* No `routerLink`, informamos o caminho que queremos acessar. 
+
+* Passamos o id referente ao curso que está na mesma linha do botão.
+
+* Declaramos uma classe do Bootstrap para estilizar o botão.
+
+* Definimos o texto do botão.
+
+3 - Crie o componente **courses/course-info.component.ts** e o template **course-info.component.html** para corresponder à nossa rota:
+
+![img/041.png](https://github.com/aluiziomonteiro/angular/blob/master/img/041.png)
+
+4 - Crie uma nova rota em **app.module.ts** para triggar o nosso componente.
+
+5 - Declare o nosso componente no ngModule para que angular entenda que ele é um componente.
+
+Código do ngModule:
+
+~~~typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+import { CourseListComponent } from './courses/course-list-component';
+import { StarComponent } from './star/star-component';
+import { ReplacePipe } from './pipe/replace.pipe';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+
+import { RouterModule } from '@angular/router'; // Módulo de Rotas
+import { Error404Component } from './error-404/error-404.component';
+import { CourseInfoComponent } from './courses/course-info.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    CourseListComponent, 
+    StarComponent, 
+    ReplacePipe, 
+    NavBarComponent,
+    Error404Component,
+    CourseInfoComponent // Novo componente
+  ],
+  imports: [
+    BrowserModule, 
+    FormsModule,
+    RouterModule.forRoot([
+      {
+        path: 'courses/info', component: CourseInfoComponent //Nova rota
+      },
+      {
+        path: 'courses', component: CourseListComponent
+      },
+      {
+        path: '**', component: Error404Component 
+      },
+      {
+        path: '', redirectTo: 'courses', pathMatch: 'full'
+      } 
+    ])
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+~~~
+
+Observe que nossa rota vai receber o id que foi passado no link criado anteriormente em **course-list.component.html**.
+
+~~~typescript
+ <td> <!--Options-->
+                <a [routerLink]="['/courses/info/', 'course.id']" class="btn btn-primary" >Edit</a> 
+            </td>
+~~~
+
+6 - Em nosso **course-info.component.ts** vamos carregar o id do curso na inicialização do componente.
+
+Para que isso seja possível, nossa classe deve implementar `OnInit`, criar uma variável para receber o valor do id do curso, ter um construtor para injetar a dependência e precisa ter, como parametro, um ActivatedRoute, pois ele é quem permite que informações sejam capturadas da rota que está ativa no momento:
+
+~~~typescript
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+
+@Component({
+    templateUrl: './course-info.component.html'
+})
+export class CourseInfoComponent implements OnInit{
+    courseId: number;
+
+    constructor(private activateRoute: ActivatedRoute){
+
+    }
+    ngOnInit(){
+        this.courseId = +this.activateRoute.snapshot.paramMap.get('id');
+    }
+
+}
+~~~
+
+Observe:
+
+~~~typescript
+...
+   ngOnInit(){
+        // Captura o estado da rota neste momento, obtendo o parametro "id",
+        // e atribui ao "courseId"
+        this.courseId = +this.activateRoute.snapshot.paramMap.get('id');
+    }
+...    
+~~~
+
+A informação que vem da rota é uma String. Para capturar este `id` string e atribuir à um number, utilizamos o sinal de `+`.
+
+7 - Vamos exibir este `id` em **course-info.component.html**:
+
+~~~typescript
+<h2>Course id = {{ courseId }}</h2>
+~~~
+
+8 - Reinicie o server e teste:
+
+![img/042.png](https://github.com/aluiziomonteiro/angular/blob/master/img/042.png)
+
+9 - Clique em **Edit**:
+
+![img/043.png](https://github.com/aluiziomonteiro/angular/blob/master/img/043.png)
+
+10 - Retire os `href` do **nav-bar.component.html** e coloque um `routerLink` para courses:
+
+~~~typescript
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a [routerLink]="['/courses']" class="navbar-brand">Course Manager</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a [routerLink]="['/courses']" class="nav-link">Courses</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+~~~
+
+11 - Para fazer com que o link se destaque quando estiver ativo, adiciona a propriedade: `routerLinkActive="active"` na tag `a`: 
+
+~~~typescript
+ <li class="nav-item">
+                <a [routerLink]="['/courses']" routerLinkActive="active" class="nav-link">Courses</a>
+            </li>
+~~~
+
+Recapitulando:
+
+* Criamos uma rota que passa um valor pela Url.
+
+* Utilizamos o `ActivatedRouter` para pegar este parâmetro.
+
+* Acessamos uma rota passando o id do curso com o `routerLink`.
+
+* Utilizamos a classe `active`, chamada com o `routerLinkActive`, para deixar o nosso link ativo.

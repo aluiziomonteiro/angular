@@ -10,6 +10,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 import { RouterModule } from '@angular/router'; // Módulo de Rotas
 import { Error404Component } from './error-404/error-404.component';
+import { CourseInfoComponent } from './courses/course-info.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { Error404Component } from './error-404/error-404.component';
     StarComponent, 
     ReplacePipe, 
     NavBarComponent,
-    Error404Component // Novo componente
+    Error404Component,
+    CourseInfoComponent // Novo componente
   ],
   imports: [
     BrowserModule, 
@@ -26,14 +28,17 @@ import { Error404Component } from './error-404/error-404.component';
     RouterModule.forRoot([
       {
         path: '', redirectTo: 'courses', pathMatch: 'full'
+      }, 
+      { 
+        path: 'courses/info/:id', component: CourseInfoComponent //Nova rota
       },
       {
         path: 'courses', component: CourseListComponent
       },
       {
-        path: '**', component: Error404Component // Url de erro
+        path: '**', component: Error404Component 
       }
-        
+      
     ])
   ],
   providers: [],
