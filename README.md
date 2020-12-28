@@ -1503,6 +1503,8 @@ Conclusão:
 
 * Importante informar ao Angular, onde a troca de componentes será realizada com `<router-outlet></router-outlet>` que é o responsável por fazer esta troca.
 
+___
+
 ### Ativando Rotas Através de Links e de Componentes
 
 Vamos criar botões para acessar informações sobre os nossos cursos.
@@ -1698,3 +1700,332 @@ Recapitulando:
 * Acessamos uma rota passando o id do curso com o `routerLink`.
 
 * Utilizamos a classe `active`, chamada com o `routerLinkActive`, para deixar o nosso link ativo.
+
+___
+
+### Trabalhando com Formulários e Templates
+
+Vamos trabalhar com a parte de edição de formulários, validação e rotas:
+
+1 - Crie um método em **course-service.ts** que receba o `id` como parâmetro e retorne um curso:
+
+~~~typescript
+...
+export class CourseService {
+
+    retrieveAll(): Course[]{ // Retorna o nosso array de cursos
+        return COURSES;
+    }
+
+    retrieveById(id:number): Course { // filtro
+        
+    }
+
+...
+~~~
+2 - O retorno desse método será um `find` que fará uma varredura em nossos elementos e assim que ele encontrar a primeira ocorrência do item buscado, ele a retornará:
+
+~~~typescript
+...
+retrieveById(id:number): Course { // Filtra um curso pelo id
+        return COURSES.find((courseIterator: Course) => courseIterator.id === id)
+    }
+...
+~~~
+
+3 - Altere o `courseId:number` para `course: Course;`.
+4 - Injete CourseService no construtor.
+5 - Adicione o método `retrieveById` que acabamos de criar, dentro do `ngOnInit()`:
+
+~~~typescript
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Course } from "./course";
+import { CourseService } from "./course-service";
+
+@Component({
+    templateUrl: './course-info.component.html'
+})
+export class CourseInfoComponent implements OnInit{
+    course: Course;
+
+    constructor(private activateRoute: ActivatedRoute, private courseService: CourseService){
+
+    }
+    ngOnInit(){
+        this.course = this.courseService.retrieveById(+this.activateRoute.snapshot.paramMap.get('id'));
+    }
+}
+~~~
+Já temos o nosso curso filtrado e  agora vamos passar para o template.
+
+1 - Apague tudo do **course-info.component.html**, pois vamos construir um formulário. Esta será a base:
+
+~~~html
+<h2>Course Info</h2>
+
+<hr/>
+
+<form>
+
+</form>
+~~~
+
+2 - Aqui nós vamos utilizar **Variáveis de Template**:
+
+~~~typescript
+	<h2>Course Info</h2>
+
+<hr/>
+
+<form #courseForm="ngForm">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Name</label>
+        <div class="col-sm-10">
+            <!--Faz o TWDB com o name do course-->
+            <input [(ngModel)]="course.name" name="name" class="form-control">
+        </div>
+    </div>
+</form>
+~~~
+3 - Passe outra variável de template para `ngModel`:
+~~~typescript
+...
+        <div class="col-sm-10">
+            <!--Passa uma variável de template de volta-->
+            <input [(ngModel)]="course.name" name="name" #courseName="ngModel" class="form-control">
+        </div>
+...
+~~~
+Veja se o nome do curso apareceu no Browser:
+
+![img/044.png](https://github.com/aluiziomonteiro/angular/blob/master/img/044.png)
+
+Temos algumas variáveis de interpolação que faz bem saber que elas existem. Adicione um `required` no `input` e teste cada uma delas e depois pode removê-las:
+
+~~~typescript
+<div class="col-sm-10">
+            <input [(ngModel)]="course.name" required name="name" #courseName="ngModel" class="form-control">
+        
+            {{courseName.value}} <!--Obtém o valor-->
+            {{courseName.valid}} <!--Valida-->
+            {{courseName.invalid}} <!--Também valida-->
+        </div>
+~~~
+
+4 - Vamos agora passar uma classe dinâmica para o `input`:
+
+~~~typescript
+...
+<input [(ngModel)]="course.name" required name="name" #courseName="ngModel" [ngClass]="{'is-invalid': courseName.invalid}" class="form-control">
+...
+~~~
+O `ngClass` indica que se o `value` do `input` for `invalid`, então `courseName` será `invalid`. Como nós informamos que o `input` é `required`, se apagarmos o conteúdo dele, ele vai ficar vermelho:
+
+![img/045.png](https://github.com/aluiziomonteiro/angular/blob/master/img/045.png)
+
+Ainda dentro da `<div class="col-sm-10">`, crie outra div para que possamos gerar um feedback de erro:
+
+~~~typescript
+...
+<div class="col-sm-10">
+            <input [(ngModel)]="course.name" required name="name" #courseName="ngModel" [ngClass]="{'is-invalid': courseName.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course name is required</span>
+            </div>
+        </div>
+...
+~~~
+
+Abra  o Browser e apague novamente o conteúdo do `input`:
+
+![img/046.png](https://github.com/aluiziomonteiro/angular/blob/master/img/046.png)
+
+Faremos o mesmo para cada atributo do nosso Curso:
+
+![img/047.png](https://github.com/aluiziomonteiro/angular/blob/master/img/047.png)
+
+O código do template **course-info.component.html** mais a inclusão de dois botões ao final da página, ficou assim:
+
+~~~typescript
+<h2>Course Info</h2>
+
+<hr/>
+
+<form #courseForm="ngForm">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Name</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.name" required name="name" #courseName="ngModel" [ngClass]="{'is-invalid': courseName.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course name is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Price</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.price" required name="price" type="number" #coursePrice="ngModel" [ngClass]="{'is-invalid': coursePrice.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course price is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Code</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.code" required name="code" #courseCode="ngModel" [ngClass]="{'is-invalid': courseCode.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course code is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Description</label>
+        <div class="col-sm-10">
+            <textarea [(ngModel)]="course.description" required name="description" #courseDescription="ngModel" [ngClass]="{'is-invalid': courseDescription.invalid}" class="form-control">
+            </textarea>
+            <div class="invalid-feedback">
+                <span>Course description is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Duration</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.duration" required name="duration" type="number" #courseDuration="ngModel" [ngClass]="{'is-invalid': courseDuration.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course duration is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Rating</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.rating" required name="rating" type="number" #courseRating="ngModel" [ngClass]="{'is-invalid': courseRating.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course rating is required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="">Release Date</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="course.releaseDate" required name="releaseDate" type="date" #courseReleaseDate="ngModel" [ngClass]="{'is-invalid': courseReleaseDate.invalid}" class="form-control">
+            
+            <div class="invalid-feedback">
+                <span>Course release date is required</span>
+            </div>
+        </div>
+    </div>
+    <!--Margem à direita 2 "mr-2"-->
+    <button class="btn btn-primary mr-2">Save</button>
+    <button class="btn btn-secondary">Back</button>
+</form>
+~~~
+
+O Angular consegue verificar se todos os atributos estão válidos. Vamos habilitar o botão `Save` somente se eles estiverem válidos.
+~~~typescript
+...
+<!--Colchetes são sempre usados para fazer referência à variáveis de templates e à variáveis de componentes-->
+<button [disabled]="courseForm.invalid" class="btn btn-primary mr-2">Save</button>
+...
+~~~
+
+Caso algum campo esteja inválido, o botão será desabilitado. Ele voltará a ficar disponível quando todos os campos estiverem okay.
+
+![img/048.png](https://github.com/aluiziomonteiro/angular/blob/master/img/048.png)
+
+Existe uma série de propriedades que podem ser aplicadas para as variáveis de template. Visite: [Angular.io](https://angular.io/guide/template-syntax)
+
+Agora vamos capturar o clique do botão e chamar um método `save()`.
+
+1 - Nosso service **course-service.ts** ficará assim:
+
+~~~typescript
+import { Injectable } from "@angular/core";
+import { Course } from "./course";
+
+@Injectable({ // Determina que esta classe fornece um injetável
+    providedIn: 'root' // Local que será injetado 
+})
+
+export class CourseService {
+
+    retrieveAll(): Course[]{ // Retorna o nosso array de cursos
+        return COURSES;
+    }
+
+    retrieveById(id:number): Course { // Filtra um curso pelo id
+        return COURSES.find((courseIterator: Course) => courseIterator.id === id)
+    }
+
+    // Espera receber um curso
+    save(course: Course): void {
+    //Se o curso possuir um id, ele vai alterar o elemento correspondente em nosso array
+        if(course.id){
+            // Quando a condição for verdadeira, será retornado o index do nosso array
+            const index = COURSES.findIndex((courseIterator: Course) => courseIterator.id === course.id)
+            COURSES[index] = course;
+        } 
+    }
+
+}
+...
+~~~
+
+
+2 - Abra o componente **course-info.component.ts e crie o método save para passar o curso por ele:
+
+~~~typescript
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Course } from "./course";
+import { CourseService } from "./course-service";
+
+@Component({
+    templateUrl: './course-info.component.html'
+})
+export class CourseInfoComponent implements OnInit{
+    course: Course;
+
+    constructor(private activateRoute: ActivatedRoute, private courseService: CourseService){
+
+    }
+    ngOnInit(){
+        this.course = this.courseService.retrieveById(+this.activateRoute.snapshot.paramMap.get('id'));
+    }
+
+    save(): void{
+        this.courseService.save(this.course);
+    }
+}
+~~~
+Crie uma rota no botão **back** para voltar para a lista de cursos:
+
+~~~typescript
+ <button [routerLink]="['/courses']" class="btn btn-secondary">Back</button>
+</form>
+~~~
+
+Teste o resultado no Browser:
+
+![img/049.png](https://github.com/aluiziomonteiro/angular/blob/master/img/049.png)
+
+Conclusão:
+* Trabalhamos um pouco mais com formulários.
+* Variáveis de template.
+* Verificações no formulário.
+* Adição de classes de validação.
