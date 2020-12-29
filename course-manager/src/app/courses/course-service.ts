@@ -11,6 +11,20 @@ export class CourseService {
         return COURSES;
     }
 
+    retrieveById(id:number): Course { // Filtra um curso pelo id
+        return COURSES.find((courseIterator: Course) => courseIterator.id === id)
+    }
+
+    // Espera receber um curso
+    save(course: Course): void {
+    //Se o curso possuir um id, ele vai alterar o elemento correspondente em nosso array
+        if(course.id){
+            // Quando a condição for verdadeira, será retornadoo index do nosso array
+            const index = COURSES.findIndex((courseIterator: Course) => courseIterator.id === course.id)
+            COURSES[index] = course;
+        } 
+    }
+
 }
 
 var COURSES: Course[] = [
