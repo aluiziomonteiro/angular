@@ -7,8 +7,10 @@ import { CourseListComponent } from './courses/course-list-component';
 import { StarComponent } from './star/star-component';
 import { ReplacePipe } from './pipe/replace.pipe';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { RouterModule } from '@angular/router';
 
-import { RouterModule } from '@angular/router'; // Módulo de Rotas
+import { HttpClientModule } from '@angular/common/http'; // Módulo Http
+
 import { Error404Component } from './error-404/error-404.component';
 import { CourseInfoComponent } from './courses/course-info.component';
 
@@ -20,11 +22,12 @@ import { CourseInfoComponent } from './courses/course-info.component';
     ReplacePipe, 
     NavBarComponent,
     Error404Component,
-    CourseInfoComponent // Novo componente
+    CourseInfoComponent 
   ],
   imports: [
     BrowserModule, 
     FormsModule,
+    HttpClientModule, // Http
     RouterModule.forRoot([
       {
         path: '', redirectTo: 'courses', pathMatch: 'full'

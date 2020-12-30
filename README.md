@@ -2031,3 +2031,16 @@ Conclusão:
 * Adição de classes de validação.
 
 [Código do projeto](https://github.com/aluiziomonteiro/angular/archive/cfe09393bdaace057be163f070b2cd0c34fb34af.zip)
+
+___
+
+### Segregando Responsabilidades
+___
+___
+
+Vamos alterar a nossa classe de  serviço para que a mesma faça requisições http. No backend, vamos utilizar node.js.
+
+1 - Copie a pasta [server](https://github.com/aluiziomonteiro/angular/tree/master/files/assets/server), para dentro da pasta assets do projeto. Esta pasta contém dois arquivos que serão utilizados para startar nosso projeto.
+
+
+
