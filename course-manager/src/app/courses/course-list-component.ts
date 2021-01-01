@@ -16,12 +16,19 @@ export class CourseListComponent implements OnInit{
     constructor (private courseService: CourseService){}
 
     ngOnInit(){ 
-      // This curso será filtrado baseado no que for digitado no input
-      this._courses = this.courseService.retrieveAll();
-      this.filteredCourses = this._courses;
+      this.retrieveAll();
     }
 
-    // Usado quando digitar-mos no input
+    retrieveAll(): void {
+      this.courseService.retrieveAll().subscribe({ // Escuta o Observable
+        next: courses => { // Recebe o retorno do retrieveAll de course-services.ts
+          this._courses = courses;
+          this.filteredCourses = this._courses;
+        },
+        error: err => console.log('Error', err)
+      });
+    }
+
     set filter(value: string) {
       this._filterBy = value;
 

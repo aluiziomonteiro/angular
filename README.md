@@ -2040,7 +2040,373 @@ ___
 
 Vamos alterar a nossa classe de  serviço para que a mesma faça requisições http. No backend, vamos utilizar node.js.
 
-1 - Copie a pasta [server](https://github.com/aluiziomonteiro/angular/tree/master/files/assets/server), para dentro da pasta assets do projeto. Esta pasta contém dois arquivos que serão utilizados para startar nosso projeto.
+1 - Crie uma pasta e subpasta chamdas **/servers/course-manager-server/** fora da raiz do nosso projeto.
+
+2 - Copie os dois [arquivos](https://github.com/aluiziomonteiro/angular/tree/master/files/assets/server) que estão dentro dessa pasta, para dentro da pasta **course-manager-server** que acabamos de criar,
+
+![img/050.png](https://github.com/aluiziomonteiro/angular/blob/master/img/050.png)
+
+3 - Navegue, via terminal, para dentro da pasta **course-manager-server** e digite `npm install` para instalar todas as dependências que o nosso back-end precisa.
+
+Depois que o carregamento estiver concluído, digite `node serve.js` para startar o back-end.
+
+![img/051.png](https://github.com/aluiziomonteiro/angular/blob/master/img/051.png)
+
+Não vamos tratar sobre node aqui.
+
+Vamos voltar para VS Code.
+ 
+1 - No arquivo **app.module.ts**, importe o modulo `http`:
+
+`import { HttpClientModule } from '@angular/common/http'; // Módulo Http`
+
+2 - Expecifique o módulo também na parte de imports:
+
+~~~typescript
+...
+imports: [
+    BrowserModule, 
+    FormsModule,
+    HttpClientModule, // Http
+...
+~~~
+
+O código completo fica da seguinte forma:
+
+~~~typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+import { CourseListComponent } from './courses/course-list-component';
+import { StarComponent } from './star/star-component';
+import { ReplacePipe } from './pipe/replace.pipe';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { RouterModule } from '@angular/router';
+
+import { HttpClientModule } from '@angular/common/http'; // Módulo Http
+
+import { Error404Component } from './error-404/error-404.component';
+import { CourseInfoComponent } from './courses/course-info.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    CourseListComponent, 
+    StarComponent, 
+    ReplacePipe, 
+    NavBarComponent,
+    Error404Component,
+    CourseInfoComponent 
+  ],
+  imports: [
+    BrowserModule, 
+    FormsModule,
+    HttpClientModule, // Http
+    RouterModule.forRoot([
+      {
+        path: '', redirectTo: 'courses', pathMatch: 'full'
+      }, 
+      { 
+        path: 'courses/info/:id', component: CourseInfoComponent //Nova rota
+      },
+      {
+        path: 'courses', component: CourseListComponent
+      },
+      {
+        path: '**', component: Error404Component 
+      }
+      
+    ])
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+~~~
+
+3 - Abra o arquivo **course-service.ts**. Vamos inxertar via injeção de dependências, o `HttpClient` do pacote `common/http`:
+
+~~~typescript
+...
+export class CourseService {
+
+    constructor(private httpClient: HttpClient){ }
+...
+~~~
+
+Agora nós podemos utilizar os metodos http para realizar as nossas requisições.
+
+4 - Crie a variável ` private coursesUrl: string = '';
+` e vamos passar para ela o base path e a porta do nosso back-end. O base path está no arquivo **servers/sourse-manager-server/serve.js**
+
+![img/052.png](https://github.com/aluiziomonteiro/angular/blob/master/img/052.png)
+
+Nosso end point fica assim:
+
+~~~typescript
+...
+export class CourseService {
+
+    private coursesUrl: string = 'http://localhost:3100/api/courses';`
+...
+~~~
+
+5 - No método `retrieveAll()`, vamos utilizar o get da classe httpClient e motificar o tipo de retorno para um Observable:
+
+Código:
+~~~typescript
+
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { Course } from "./course";
+
+@Injectable({ // Determina que esta classe fornece um injetável
+    providedIn: 'root' // Local que será injetado 
+})
+
+export class CourseService {
+
+    private coursesUrl: string = 'http://localhost:3100/api/courses'; //base do end point
+
+    constructor(private httpClient: HttpClient){ }
+
+    
+    retrieveAll(): Observable<Course[]>{ // Retorna um observable que envelopa uma lista de cursos
+        return this.httpClient.get<Course[]>(this.coursesUrl);
+    }
+
+    retrieveById(id:number): Course { // Filtra um curso pelo id
+        return COURSES.find((courseIterator: Course) => courseIterator.id === id)
+    }
+
+    // Espera receber um curso
+    save(course: Course): void {
+    //Se o curso possuir um id, ele vai alterar o elemento correspondente em nosso array
+        if(course.id){
+            // Quando a condição for verdadeira, será retornadoo index do nosso array
+            const index = COURSES.findIndex((courseIterator: Course) => courseIterator.id === course.id)
+            COURSES[index] = course;
+        } 
+    }
+
+}
+
+var COURSES: Course[] = [
+    {
+        id: 1,
+        name: 'Angular: CLI',
+        releaseDate: 'November 2, 2019',
+        description: 'Neste curso, os alunos irão obter um grande conhecimento nos principais recursos do CLI.',
+        duration: 120,
+        code: 'XLF-1212',
+        rating: 3,
+        price: 12.99,
+        imageUrl: '/assets/images/cli.png',
+    },
+    {
+        id: 2,
+        name: 'Angular: Forms',
+        releaseDate: 'November 4, 2019',
+        description: 'Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis no módulo de Forms.',
+        duration: 80,
+        code: 'DWQ-3412',
+        rating: 3.5,
+        price: 24.99,
+        imageUrl: '/assets/images/forms.png',
+    },
+    {
+        id: 3,
+        name: 'Angular: HTTP',
+        releaseDate: 'November 8, 2019',
+        description: 'Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis no módulo de HTTP.',
+        duration: 80,
+        code: 'QPL-0913',
+        rating: 4.0,
+        price: 36.99,
+        imageUrl: '/assets/images/http.png',
+    },
+    {
+        id: 4,
+        name: 'Angular: Router',
+        releaseDate: 'November 16, 2019',
+        description: 'Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis no módulo de Router.',
+        duration: 80,
+        code: 'OHP-1095',
+        rating: 4.5,
+        price: 46.99,
+        imageUrl: '/assets/images/router.png',
+    },
+    {
+        id: 5,
+        name: 'Angular: Animations',
+        releaseDate: 'November 25, 2019',
+        description: 'Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis sobre Animation.',
+        duration: 80,
+        code: 'PWY-9381',
+        rating: 5,
+        price: 56.99,
+        imageUrl: '/assets/images/animations.png',
+    }
+];
+~~~
+
+6 - Temos um erro em **course-list-component.ts**. Isto porque o this.courses aguarda um observable.
+Faremos da seguinte maneira:
+
+~~~typescript
+...
+    _filterBy: string;
+
+    constructor (private courseService: CourseService){}
+
+    ngOnInit(){ 
+      this.retrieveAll();
+    }
+
+    retrieveAll(): void {
+      this.courseService.retrieveAll().subscribe({ // Escuta o Observable
+        next: courses => { // Recebe o retorno do retrieveAll de course-services.ts
+          this._courses = courses;
+          this.filteredCourses = this._courses;
+        },
+        error: err => console.log('Error', err);
+      });
+    }
+...
+~~~
+Precisamos alterar o tipo de retorno porque agora ele recebe um observable. Para
+realmente receber o callback do observable, é preciso que o método esteja inscrito com subscribe();
+
+O next recebe o array de cursos que o observable pode ou não nos retornar.
+Como nao temos garantia de que realmente haverá um retorno, vamos passar a atribuição de `filteredCourses` para dentro do next. É somente neste ponto que temos a certeza de que algo foi retornado.
+
+Dentro do retrieveAll(), teremos um outro callback de tratamento de erro, pois se der algum erro durante a response do observable, teremos a possibilidade de trata-lo. Por enquanto, nós somente vamos logar este erro: ` `
+
+Já podemos testar se os nossos cursos estão sendo carregados corretamente:
+
+![img/054.png](https://github.com/aluiziomonteiro/angular/blob/master/img/054.png)
+
+Foi feita uma requisição do tipo `get()` encima desta listágem de cursos. Agora vamos trabalhar o `get()` na parte de editar da nossa aplicação:
+
+Em **course.service.ts** vamos alterar o `retrieveById()` para que ele faça uma requisição
+
+1 - retrieveById vai retornar um get da classe httpClient que dessa vez vai retornar somente um curso:
+
+~~~typescript
+...
+    retrieveById(id:number): Course {
+        return this.httpClient.get<Course>();
+    }
+...
+~~~
+
+2 - A idéia agora é concatenar nossa Url com o id do curso em questão:
+
+~~~typescript
+...
+  retrieveById(id:number): Course {
+        return this.httpClient.get<Course>(`${this.coursesUrl}/${id}`);
+    }
+...
+~~~
+
+3 - Lembrando que o retorno de um httpClient é um Observable que aqui vai envelopar um curso:
+
+~~~typescript
+...
+  retrieveById(id:number): Observable<Course> {
+        return this.httpClient.get<Course>(`${this.coursesUrl}/${id}`);
+    }
+...
+~~~
+
+4 - Como o Observable é um contrato, precisamos dar um subscribe para que ele possa ser escutado lá em **course-info.component.ts**:
+
+~~~typescript
+...
+ngOnInit(){
+        this.courseService.retrieveById(+this.activateRoute.snapshot.paramMap.get('id')).subscribe();
+    }
+...
+~~~
+
+5 - Dentro do subscribe vamos fazer a mesma coisa que foi feita anteriormente. O `next` vai receber um curso e teremos uma função `=>` que vai igualar o `curso` da nossa classe, ao curso que é retornado da requisição http:
+
+~~~typescript
+...
+ngOnInit(){
+        this.courseService.retrieveById(+this.activateRoute.snapshot.paramMap.get('id')).subscribe({
+            next: course => this.course = course,
+        });
+    }
+...
+~~~
+
+6 - E caso dê algum erro durante a requisição:
+
+~~~typescript
+...
+ ngOnInit(){
+ // Execução assíncrona - (Fora do processamento do restante da aplicação)
+ this.courseService.retrieveById(+this.activateRoute.snapshot.paramMap.get('id')).subscribe({
+            next: course => this.course = course,
+            error: err => console.log('Error', err)
+        });
+    }
+...
+~~~
+
+Já podemos fazer o teste acessando o cotão Editar na interface.
+
+![img/055.png](https://github.com/aluiziomonteiro/angular/blob/master/img/055.png)
+
+Observação: Como o subscribe() é assíncrono, pode acontecer que ele se execute antes mesmo que se tenha um curso carregado, o que resultaria na exibixão incompleta do formulario. Para tratar-mos desse detalhe, vamos fazer com que o formulário só seja exibido, caso o curso já esteja realmente carregado:
+
+7 - Basta colocar um ngIf em **course-list-component.html** testando se já tem alguma informação no curso:
+
+![img/057.png](https://github.com/aluiziomonteiro/angular/blob/master/img/057.png)
+
+O erro desapareceu:
+![img/056.png](https://github.com/aluiziomonteiro/angular/blob/master/img/056.png)
+
+Agora é o salvar com http.
+
+1 - Vamos para o método `save()` do **course.service.ts**.
+Se o `id` do curso estiver preenchido, significa que nós queremos alterar o bendito.
+
+~~~typescript
+...
+ save(course: Course): void {
+        if(course.id){
+            
+        } 
+    }
+...
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

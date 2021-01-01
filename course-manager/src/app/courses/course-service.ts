@@ -1,5 +1,9 @@
+
+
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { Course } from "./course";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({ // Determina que esta classe fornece um injetável
     providedIn: 'root' // Local que será injetado 
@@ -7,21 +11,22 @@ import { Course } from "./course";
 
 export class CourseService {
 
-    retrieveAll(): Course[]{ // Retorna o nosso array de cursos
-        return COURSES;
+    private coursesUrl: string = 'http://localhost:3100/api/courses'; // Base do end point
+
+    constructor(private httpClient: HttpClient){ }
+
+    
+    retrieveAll(): Observable<Course[]>{ // Retorna um observable que envelopa uma lista de cursos
+        return this.httpClient.get<Course[]>(this.coursesUrl);
     }
 
-    retrieveById(id:number): Course { // Filtra um curso pelo id
-        return COURSES.find((courseIterator: Course) => courseIterator.id === id)
+    retrieveById(id:number): Observable<Course> {
+        return this.httpClient.get<Course>(`${this.coursesUrl}/${id}`);
     }
 
-    // Espera receber um curso
     save(course: Course): void {
-    //Se o curso possuir um id, ele vai alterar o elemento correspondente em nosso array
         if(course.id){
-            // Quando a condição for verdadeira, será retornadoo index do nosso array
-            const index = COURSES.findIndex((courseIterator: Course) => courseIterator.id === course.id)
-            COURSES[index] = course;
+            
         } 
     }
 
