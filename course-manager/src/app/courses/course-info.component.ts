@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subscriber } from "rxjs";
 import { Course } from "./course";
 import { CourseService } from "./course-service";
 
@@ -14,7 +13,6 @@ export class CourseInfoComponent implements OnInit{
 
     }
     ngOnInit(){ 
-        // Execução assíncrona - (Fora do processamento do restante da aplicação)
         this.courseService.retrieveById(+this.activateRoute.snapshot.paramMap.get('id')).subscribe({
             next: course => this.course = course,
             error: err => console.log('Error', err)
@@ -22,6 +20,9 @@ export class CourseInfoComponent implements OnInit{
     }
      
     save(): void{
-        this.courseService.save(this.course);
+        this.courseService.save(this.course).subscribe({
+            next: course => console.log('Saved with success',course),
+            error: err => console.log('Error',err)
+        });
     }
 }

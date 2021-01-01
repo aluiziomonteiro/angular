@@ -2038,17 +2038,17 @@ ___
 ___
 ___
 
-Vamos alterar a nossa classe de  serviço para que a mesma faça requisições http. No backend, vamos utilizar node.js.
+Vamos alterar a nossa classe de serviço para que a mesma faça requisições http. No back end, vamos utilizar node.js.
 
-1 - Crie uma pasta e subpasta chamdas **/servers/course-manager-server/** fora da raiz do nosso projeto.
+1 - Crie uma pasta e subpasta chamadas **/servers/course-manager-server/** fora da raiz do nosso projeto.
 
-2 - Copie os dois [arquivos](https://github.com/aluiziomonteiro/angular/tree/master/files/assets/server) que estão dentro dessa pasta, para dentro da pasta **course-manager-server** que acabamos de criar,
+2 - Copie os dois [arquivos](https://github.com/aluiziomonteiro/angular/tree/master/files/assets/server) que estão dentro dessa pasta, para dentro da pasta **course-manager-server** que acabamos de criar:
 
 ![img/050.png](https://github.com/aluiziomonteiro/angular/blob/master/img/050.png)
 
-3 - Navegue, via terminal, para dentro da pasta **course-manager-server** e digite `npm install` para instalar todas as dependências que o nosso back-end precisa.
+3 - Navegue, via terminal, para dentro da pasta **course-manager-server** e digite `npm install` para instalar todas as dependências que o nosso back end precisa.
 
-Depois que o carregamento estiver concluído, digite `node serve.js` para startar o back-end.
+Depois que o carregamento estiver concluído, digite `node serve.js` para startar o back-end:
 
 ![img/051.png](https://github.com/aluiziomonteiro/angular/blob/master/img/051.png)
 
@@ -2127,7 +2127,7 @@ export class AppModule { }
 
 ~~~
 
-3 - Abra o arquivo **course-service.ts**. Vamos inxertar via injeção de dependências, o `HttpClient` do pacote `common/http`:
+3 - Abra o arquivo **course-service.ts**. Vamos enxertar via injeção de dependências, o `HttpClient` do pacote `common/http`:
 
 ~~~typescript
 ...
@@ -2137,10 +2137,10 @@ export class CourseService {
 ...
 ~~~
 
-Agora nós podemos utilizar os metodos http para realizar as nossas requisições.
+Agora nós podemos utilizar os métodos http para realizar as nossas requisições.
 
 4 - Crie a variável ` private coursesUrl: string = '';
-` e vamos passar para ela o base path e a porta do nosso back-end. O base path está no arquivo **servers/sourse-manager-server/serve.js**
+` e vamos passar para ela o base path e a porta do nosso back end. O base path está no arquivo **servers/sourse-manager-server/serve.js**:
 
 ![img/052.png](https://github.com/aluiziomonteiro/angular/blob/master/img/052.png)
 
@@ -2154,7 +2154,7 @@ export class CourseService {
 ...
 ~~~
 
-5 - No método `retrieveAll()`, vamos utilizar o get da classe httpClient e motificar o tipo de retorno para um Observable:
+5 - No método `retrieveAll()`, vamos utilizar o get da classe httpClient e modificar o tipo de retorno para um Observable:
 
 Código:
 ~~~typescript
@@ -2187,7 +2187,7 @@ export class CourseService {
     save(course: Course): void {
     //Se o curso possuir um id, ele vai alterar o elemento correspondente em nosso array
         if(course.id){
-            // Quando a condição for verdadeira, será retornadoo index do nosso array
+            // Quando a condição for verdadeira, será retornado o index do nosso array
             const index = COURSES.findIndex((courseIterator: Course) => courseIterator.id === course.id)
             COURSES[index] = course;
         } 
@@ -2284,7 +2284,7 @@ realmente receber o callback do observable, é preciso que o método esteja insc
 O next recebe o array de cursos que o observable pode ou não nos retornar.
 Como nao temos garantia de que realmente haverá um retorno, vamos passar a atribuição de `filteredCourses` para dentro do next. É somente neste ponto que temos a certeza de que algo foi retornado.
 
-Dentro do retrieveAll(), teremos um outro callback de tratamento de erro, pois se der algum erro durante a response do observable, teremos a possibilidade de trata-lo. Por enquanto, nós somente vamos logar este erro: ` `
+Dentro do retrieveAll(), teremos um outro callback de tratamento de erro, pois se der algum erro durante a response do observable, teremos a possibilidade de tratá-lo. Por enquanto, nós somente vamos logar este erro: ` `
 
 Já podemos testar se os nossos cursos estão sendo carregados corretamente:
 
@@ -2304,7 +2304,7 @@ Em **course.service.ts** vamos alterar o `retrieveById()` para que ele faça uma
 ...
 ~~~
 
-2 - A idéia agora é concatenar nossa Url com o id do curso em questão:
+2 - A ideia agora é concatenar nossa Url com o id do curso em questão:
 
 ~~~typescript
 ...
@@ -2360,11 +2360,11 @@ ngOnInit(){
 ...
 ~~~
 
-Já podemos fazer o teste acessando o cotão Editar na interface.
+Já podemos fazer o teste acessando o cotão Editar na interface:
 
 ![img/055.png](https://github.com/aluiziomonteiro/angular/blob/master/img/055.png)
 
-Observação: Como o subscribe() é assíncrono, pode acontecer que ele se execute antes mesmo que se tenha um curso carregado, o que resultaria na exibixão incompleta do formulario. Para tratar-mos desse detalhe, vamos fazer com que o formulário só seja exibido, caso o curso já esteja realmente carregado:
+Observação: Como o subscribe() é assíncrono, pode acontecer que ele se execute antes mesmo que se tenha um curso carregado, o que resultaria na exibição incompleta do formulário. Para tratarmos desse detalhe, vamos fazer com que o formulário só seja exibido, caso o curso já esteja realmente carregado:
 
 7 - Basta colocar um ngIf em **course-list-component.html** testando se já tem alguma informação no curso:
 
@@ -2376,7 +2376,9 @@ O erro desapareceu:
 Agora é o salvar com http.
 
 1 - Vamos para o método `save()` do **course.service.ts**.
-Se o `id` do curso estiver preenchido, significa que nós queremos alterar o bendito.
+Se o `id` do curso estiver preenchido, significa que nós queremos alterar lo:
+
+
 
 ~~~typescript
 ...
@@ -2388,15 +2390,50 @@ Se o `id` do curso estiver preenchido, significa que nós queremos alterar o ben
 ...
 ~~~
 
+2 - Para alterar o "salvar" vamos utilizar o método `httpClient.put()` que retorna um curso e recebe a url com o id do curso.
+Save também é um `observable`.
+Caso não exista um id, vamos ter que retornar um post. O back end será o responsável por implementá-lo:
+
+~~~typescript
+...
+  save(course: Course): Observable<Course> {
+        if(course.id){
+            return this.httpClient.put<Course>(`${this.coursesUrl}/${course.id}`, course);
+        } else{
+            return this.httpClient.post<Course>(`${this.coursesUrl}`, course);
+        }
+    }
+...
+~~~
 
 
+3 - É preciso dar um subscribe no `save()` do **course-info.component.ts** para que, de fato, a requisição seja atendida.
 
+~~~typescript
+...
+ save(): void{
+        this.courseService.save(this.course).subscribe({
+            next: course => console.log('Saved with success',course),
+            error: err => console.log('Error',err)
+        });
+...
+~~~
 
+4 - No botão de salvar em **course-info.component.html**, chame o método save() caso ainda não tenha feito isso:
 
+~~~html
+...
+<button [disabled]="courseForm.invalid" (click)="save()" class="btn btn-primary mr-2">Save</button>
+...
+~~~
 
+5 - Reinicie o server, abra o browser e edite alguma informação:
 
+![img/058.png](https://github.com/aluiziomonteiro/angular/blob/master/img/058.png)
 
+6 – Salve e retorne para a lista e verifique se a alteração foi salva corretamente:
 
+![img/059.png](https://github.com/aluiziomonteiro/angular/blob/master/img/059.png)
 
 
 

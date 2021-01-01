@@ -80,6 +80,6 @@
         </div>
     </div>
     <!--Margem à direita 2 "mr-2"-->
-    <button [disabled]="courseForm.invalid" (click)='save' class="btn btn-primary mr-2">Save</button>
+    <button [disabled]="courseForm.invalid" (click)="save()" class="btn btn-primary mr-2">Save</button>
     <button [routerLink]="['/courses']" class="btn btn-secondary">Back</button>
 </form>

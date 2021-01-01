@@ -5,8 +5,8 @@ import { Observable } from "rxjs";
 import { Course } from "./course";
 import { HttpClient } from "@angular/common/http";
 
-@Injectable({ // Determina que esta classe fornece um injetável
-    providedIn: 'root' // Local que será injetado 
+@Injectable({ 
+    providedIn: 'root' 
 })
 
 export class CourseService {
@@ -16,7 +16,7 @@ export class CourseService {
     constructor(private httpClient: HttpClient){ }
 
     
-    retrieveAll(): Observable<Course[]>{ // Retorna um observable que envelopa uma lista de cursos
+    retrieveAll(): Observable<Course[]>{ 
         return this.httpClient.get<Course[]>(this.coursesUrl);
     }
 
@@ -24,12 +24,13 @@ export class CourseService {
         return this.httpClient.get<Course>(`${this.coursesUrl}/${id}`);
     }
 
-    save(course: Course): void {
+    save(course: Course): Observable<Course> {
         if(course.id){
-            
-        } 
+            return this.httpClient.put<Course>(`${this.coursesUrl}/${course.id}`, course);
+        } else{
+            return this.httpClient.post<Course>(`${this.coursesUrl}`, course);
+        }
     }
-
 }
 
 var COURSES: Course[] = [
