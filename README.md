@@ -2560,6 +2560,164 @@ Agora vamos criar a parte de deletar.
 
 Requisições em http serão muito utilizadas nos próximos cursos.
 
-[Código do Projeto]()
+[Código do Projeto](https://github.com/aluiziomonteiro/angular/tree/909c9a6c0981df7e36a2dbf08289a1df2893a92a)
+
+___
+
+### Segregando a Aplicação em Módulos
+
+Módulo é uma abstração. Um conceito que nos ajuda a separar a nossa aplicação. Vamos imaginar a aplicação como sendo uma casa que possuí vários cômodos. Cada cômodo é como se fosse um módulo. O que dá vida ao cômodo, são os móveis.
+Os móveis são como se fossem os componentes da nossa aplicação: "Botões, campos, pipes, rotas...".
+
+Vamos trabalhar com a nossa parte de curso.
+Criaremos um módulo para isolá-lo.
+
+1 - Crie o arquivo **courses/module.ts**.
+2 - Defina a classe `CourseModule` e anote-a como sendo um módulo:
+~~~tipescript
+import { NgModule } from "@angular/core";
+
+@NgModule({
+    
+})
+export class CourseModule{
+
+}
+~~~
+
+3 - No `@NgModule, vamos trabalhar com `declarator`, para declarar algum componentes e pipes, e o `import` que vai indicar quais são os outros módulos que precisam ser importados para que o módulo atual funcione. Estas rotas foram declaradas anteriormente no arquivo **app.module.ts**:
+
+![img/061.png](https://github.com/aluiziomonteiro/angular/blob/master/img/061.png)
+
+Nosso **course.module.ts** fica assim:
+
+~~~typescript
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { CourseInfoComponent } from "./course-info.component";
+import { CourseListComponent } from "./course-list-component";
+
+@NgModule({
+    declarations: [ // Componentes que o módulo de curso precisa para poder existir
+        CourseListComponent,
+        CourseInfoComponent
+    ],
+    imports: [ 
+    // Rotas que o módulo de cursos tem e que precisam ser carregadas junto com o este módulo
+        RouterModule.forChild([ 
+            { 
+                path: 'courses/info/:id', component: CourseInfoComponent //Nova rota
+            },
+            {
+                path: 'courses', component: CourseListComponent
+            }
+        ])
+    ]
+})
+export class CourseModule{
+
+}
+~~~
+
+4 - Volte para o **app.module.ts** e importe o nosso módulo de curso lá:
+
+![img/062.png](https://github.com/aluiziomonteiro/angular/blob/master/img/062.png)
+
+5 - Teste a aplicação:
+
+![img/063.png](https://github.com/aluiziomonteiro/angular/blob/master/img/063.png)
+
+Xingou cachorro, gato, papagaio, tudo que anda, voa, nada e rasteja, mas tudo bem. Vamos ver com calma:
+
+1 - O Angular não aceita que um módulo seja importado em mais de um lugar, portanto, devemos remover o **CourseInfo** e o **CourseList** do **app.module.ts**, pois eles já estão declarados em nosso novo módulo **course.modules.ts**:
+
+
+![img/064.png](https://github.com/aluiziomonteiro/angular/blob/master/img/064.png)
+
+2 - Outro erro indicando não reconhecer o o NgModule em **course.module**. Importe o `CommonModule` e o `FormsModule` para tornar disponível o acesso aos elementos básicos de formulários e as diretivas de formulários respectivamente.
+Declare também o `StarComponent` e o `ReplacePipe:
+
+Nosso **course.module.ts** fica da seguinte forma:
+~~~typescript
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { ReplacePipe } from "../pipe/replace.pipe";
+import { StarComponent } from "../star/star-component";
+import { CourseInfoComponent } from "./course-info.component";
+import { CourseListComponent } from "./course-list-component";
+
+@NgModule({
+    declarations: [ // Componentes que o módulo de curso precisa para poder existir
+        CourseListComponent,
+        CourseInfoComponent,
+        StarComponent,
+        ReplacePipe
+       
+    ],
+    imports: [ 
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild([ 
+            { 
+                path: 'courses', component: CourseListComponent 
+            },
+            {
+                path: 'courses/info/:id', component: CourseInfoComponent
+            }
+        ])
+    ]
+})
+export class CourseModule{
+
+}
+~~~
+
+Nosso **app.module.ts** fica da seguinte forma:
+
+~~~typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { Error404Component } from './error-404/error-404.component';
+import { CourseModule } from './courses/course.module';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    NavBarComponent,
+    Error404Component  
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    CourseModule, 
+    RouterModule.forRoot([
+      {
+        path: '', redirectTo: 'courses', pathMatch: 'full'
+      },
+      {
+        path: '**', component: Error404Component 
+      } 
+    ])
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+~~~
+
+
+3 - Reinicie e teste a aplicação novamente:
+
+![img/065.png](https://github.com/aluiziomonteiro/angular/blob/master/img/065.png)
+
+Pronto! Isolamos tudo do curso em **course.module.ts**:
+
+![img/Diagrama7.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama7.png)
 
 
