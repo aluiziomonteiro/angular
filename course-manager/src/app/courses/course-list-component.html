@@ -15,9 +15,9 @@
         <th>Image</th>
         <th>Name</th>
         <th>Price</th>
-        <th style="width: 10%">Code</th>
-        <th>Description</th> 
-        <th style="width: 14%">Release Date</th> 
+        <th>Code</th>
+        <th style="width: 25%">Description</th> <!--Alteração dos estilos-->
+        <th>Release Date</th> 
         <th>Rating</th>
         <th>Options</th>
     </thead>
@@ -34,7 +34,8 @@
                 <app-star [rating]="course.rating"> </app-star>
             </td>
             <td> <!--Options-->
-                <a [routerLink]="['/courses/info', course.id]" class="btn btn-primary" >Edit</a> 
+                <a [routerLink]="['/courses/info', course.id]" class="btn btn-primary mr-2" >Edit</a> 
+                <button (click)="deleteById(course.id)" class="btn btn-danger">Delete</button>
             </td>
         </tr>
     </tbody>

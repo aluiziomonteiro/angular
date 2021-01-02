@@ -167,10 +167,9 @@ ___
 Em um template HTML no angular existem alguns recursos que são importantes no decorrer de um projeto.
 A Interpolação nada mais é do que um recurso de ‘embedar’ expressões dentro de uma área delimitada por {{ .. }}.
 
-O title do código do código exposto acima foi interpolada no template **app/app.component.html**.
+O title do código exposto acima foi interpolada no template **app/app.component.html**.
 
 1 - Acesse o **app/app.component.html**, apague todo o seu conteúdo e em seguida interpole somente o title:
-
 
 ![img/003.png](https://github.com/aluiziomonteiro/angular/blob/master/img/003.png)
 
@@ -2030,7 +2029,7 @@ Conclusão:
 * Verificações no formulário.
 * Adição de classes de validação.
 
-[Código do projeto](https://github.com/aluiziomonteiro/angular/archive/cfe09393bdaace057be163f070b2cd0c34fb34af.zip)
+[Código do Projeto](https://github.com/aluiziomonteiro/angular/archive/cfe09393bdaace057be163f070b2cd0c34fb34af.zip)
 
 ___
 
@@ -2437,13 +2436,130 @@ Caso não exista um id, vamos ter que retornar um post. O back end será o respo
 
 
 
+[Código do projeto](https://github.com/aluiziomonteiro/angular/tree/4832b757ffaa5a92f8c8029b82171d6cfb472761)
 
 
 
 
 
+___
+
+### Trabalhando com Delete
+
+Agora vamos criar a parte de deletar.
+
+1 - Abra nosso **course.service.ts** e crie o método para deletar logo abaixo do `save()`. Este método recebe um `id` e retorna um Observable com um objeto `any`, isso porque na verdade, não teremos nenhum corpo de retorno:
+
+~~~typescript
+...
+ deleteById(id: number): Observable<any>{
+        
+    }
+}
+...
+~~~
+
+2 - No retorno desse método, nós vamos chamar o método `delete` de `httpClient`, e retornar qualquer coisa que vier:
+
+~~~typescript
+...
+ deleteById(id: number): Observable<any>{
+        return this.httpClient.delete<any>(`${this.coursesUrl}/${id}`);
+    }
+...
+~~~
+
+3 - Vamos para o **course-list.component.ts** para criar um método que corresponda a nossa ação de deletar. Basta chamar o deleteById do service passando o id:
+
+~~~typescript
+...
+ deleteById(courseId: number) : void{
+      this.courseService.deleteById(courseId)
+    }
+...
+~~~
+
+4 - Dê o subcribe nele. Como ele não vai ter retorno, chame o next com uma função vazia e exiba uma mensagem de sucesso na call back function:
+
+~~~typescript
+...
+    deleteById(courseId: number) : void{
+      this.courseService.deleteById(courseId).subscribe({
+        next: () => {
+          console.log('Deleted with success');
+          this.retrieveAll(); // Filtra novamente, para atualizar o componente
+        },
+        error: err => console.log('Error', err)
+      })
+    }
+...
+~~~
+
+5 - Vamos para o template inserir o botão de deletar. No onclick dele, chame a função `deleteById()` passando o id do curso:
+
+~~~typescript
+...
+     <td> <!--Options-->
+                <a [routerLink]="['/courses/info', course.id]" class="btn btn-primary mr-2" >Edit</a> 
+                <button (click)="deleteById(course.id)" class="btn btn-danger">Delete</button>
+            </td>
+...
+~~~
+
+6 - Foi realizado uma mudança no style dos títulos da tabela  . Também foi adicionada uma margem `mr-2` no botão de editar, para para uma visualização mais agradável. O código completo fica assim:
+
+~~~html
+<h4>Course List</h4>
+
+<div class="form-group row">
+
+    <label class="col-sm-2 col-form-label" for="">Filter by</label>
+
+    <div class="col-sm-10">
+        <input [(ngModel)]="filter" class="form-control">
+    </div>
+
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Code</th>
+        <th style="width: 25%">Description</th> <!--Alteração dos estilos-->
+        <th>Release Date</th> 
+        <th>Rating</th>
+        <th>Options</th>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let course of filteredCourses">
+            <td> <img [src]="course.imageUrl" width="40" height="40"> </td>
+            <td>{{course.name}}</td>
+            <td>{{course.price}}</td>
+            <td>{{course.code | lowercase | replace: '-': ' '}}</td>
+            <td>{{course.description}}</td> 
+            <td>{{course.releaseDate | date: 'dd/mm/yyyy'}}</td> 
+            <td>
+                <app-star [rating]="course.rating"> </app-star>
+            </td>
+            <td> <!--Options-->
+                <a [routerLink]="['/courses/info', course.id]" class="btn btn-primary mr-2" >Edit</a> 
+                <button (click)="deleteById(course.id)" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+~~~
+
+7 - Teste o código:
 
 
+![img/060.png](https://github.com/aluiziomonteiro/angular/blob/master/img/060.png)
 
+Requisições em http serão muito utilizadas nos próximos cursos.
+
+[Código do Projeto]()
 
 
