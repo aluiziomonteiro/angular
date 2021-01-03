@@ -2852,6 +2852,99 @@ A ideia de separação em módulos, tem como objetivo fazer com que seja importa
 ___
 
 
+### Conhecendo a pasta Core
+
+Esta pasta pode ou não ser utilizada dentro a nossa aplicação. Ela é indicada para guardar componentes mais pesados e com regras de negócio maiores. Ex: A navbar, que futuramente pode vir a ter outros recursos como login e logica de negócio para exibir quem está logado em nossa aplicação.
+
+
+
+1 - Cria a pasta **/src/app/core**.
+
+2 - entro de **/core**, cria outra pasta chamada **/component**
+
+3 - arraste a pasta **/nav-bar** para dentro da pasta **/component**:
+
+
+![img/070.png](https://github.com/aluiziomonteiro/angular/blob/master/img/070.png)
+
+4 - Atualize os imports.
+
+Teremos também só um módulo de core, mas conforme for o contexto das suas futuras aplicações, você pode segregar ele também.
+
+5 - Dentro da pasta **/core**, crie o arquivo **core.module.ts**.
+
+6 - Crie a classe ** CoreModule** e indique para o angular que a classe está elegível para ser um módulo.
+
+7 - Crie o declarators e um exports e em seguida, declare o navbar em ambos:
+
+~~~typescript
+import { NgModule } from "@angular/core";
+import { NavBarComponent } from "./component/nav-bar/nav-bar.component";
+
+@NgModule({
+    declarations:[
+        NavBarComponent
+    ],
+    exports: [
+        NavBarComponent
+    ]
+})
+export class CoreModule{
+
+}
+~~~
+8 - Em **app.module.ts**, retire a barra de navegação do **declarator** e importe o core module nos **imports**:
+
+Ao reiniciar a aplicação, podemos notar um erro acusando a falta do módulo de rotas. A barra de navegação precisa dele:
+
+![img/071.png](https://github.com/aluiziomonteiro/angular/blob/master/img/071.png)
+
+8 - Volte para o **core.module.ts** e import o módulo de rotas lá:
+
+~~~typescript
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { NavBarComponent } from "./component/nav-bar/nav-bar.component";
+
+@NgModule({
+    declarations:[
+        NavBarComponent
+    ],
+    imports: [ // Módulo de rotas
+        RouterModule
+    ],
+    exports: [
+        NavBarComponent
+    ]
+})
+export class CoreModule{
+
+}
+~~~
+
+9 - Teste toda a aplicação para ver se as rotas estão funcionando bem:
+
+
+![img/072.png](https://github.com/aluiziomonteiro/angular/blob/master/img/072.png)
+
+Recapitulando:
+
+* Pasta **/core:** para componentes mais pesados, nem tão genéricos e que podem ou não possuir regras de negócio.
+
+* Pasta **/shared:** para componentes mais genéricos que provavelmente serão reutilizados pela nossa aplicação.
+
+* **Módulos** - Servem para segregar contextos e reduzir o peso da nossa aplicação.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
