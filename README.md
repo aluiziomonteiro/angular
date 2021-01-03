@@ -2935,16 +2935,60 @@ Recapitulando:
 
 * **Módulos** - Servem para segregar contextos e reduzir o peso da nossa aplicação.
 
+___
+
+### Tratando Erros com Angular
+
+Vamos trabalhar com a nossa área de erro. a **erro-404**.
+
+1 - Jogue a nossa pasta de erro, dentro da pasta **/component**:
 
 
+![img/074.png](https://github.com/aluiziomonteiro/angular/blob/master/img/074.png)
 
 
+2 - Pegue a rota de erro que está em **app.module.ts** e coloque-a dentro do **core.module.ts**:
 
 
+![img/073.png](https://github.com/aluiziomonteiro/angular/blob/master/img/073.png)
 
+Código da classe **core.module.ts**:
 
+~~~typescript
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { Error404Component } from "./component/error-404/error-404.component";
+import { NavBarComponent } from "./component/nav-bar/nav-bar.component";
 
+@NgModule({
+    declarations:[
+        NavBarComponent
+    ],
+    imports: [ // Módulo de rotas
+        RouterModule.forChild([
+            {
+                path: '**', component: Error404Component 
+            } 
+        ])
+    ],
+    exports: [
+        NavBarComponent
+    ]
+})
+export class CoreModule{
 
+}
+~~~
+
+3 - Remova o **Erro404Component** de módulo pai e declare-o em **core.module**:
+
+![img/076.png](https://github.com/aluiziomonteiro/angular/blob/master/img/076.png)
+
+4 - Teste alguma rota que não exista para que a página de erro seja exibida:
+
+![img/075.png](https://github.com/aluiziomonteiro/angular/blob/master/img/075.png)
+
+Cuidado para não deixar componentes declarados no módulo pai, pois se estiverem assim, e não declarados nos seus respectivos componentes, a aplicação vai ficar funcionando, mas de nada adiantou a segregação.
 
 
 
