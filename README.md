@@ -2720,4 +2720,70 @@ Pronto! Isolamos tudo do curso em **course.module.ts**:
 
 ![img/Diagrama7.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama7.png)
 
+___
+
+### Conhecendo a Pasta Shared
+
+É uma pasta que vai conter componentes genéricos, que, conforme for a necessidade, poderão ser importados.
+
+Ex: O nosso componente de estrela, que é um componente pequeno, mas queremos que ele possa ser usado em vários lugares diferententes da nossa aplicação;
+
+1 - Crie uma pasta, dentro de **/app** chamada **/shared**.
+
+2 - Dentro de **/shared**, cria outra pasta chamada **/component** e outra chamada **/pipe**.
+
+3 - Arraste o componente de estrela para dentro da pasta **app/shared/component** e clique em Ok para atualizar os imports.
+
+É importante criar um módulo expecífico para a estrela, pois como a estrela precisa tambem de outros componentes, não convém carregar tudo isso no módulo curso sempre, ou seja, queremos carregar somente o que for preciso e nos momentos certos para não pesar a nossa aplicação.
+
+4 - Crie o módulo **star.module.ts** dentro da pasta **/star**.
+
+![img/066.png](https://github.com/aluiziomonteiro/angular/blob/master/img/066.png)
+
+5 - Declare o componente de estrela dentro da classe:
+
+~~~typescript
+import { NgModule } from "@angular/core";
+import { StarComponent } from "./star-component";
+
+@NgModule({
+    declarations:[
+        StarComponent
+    ]
+})
+export class StarModule{
+
+}
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
