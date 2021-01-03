@@ -35,7 +35,7 @@ ___
 * Gerenciar pacotes (npm).
 * Configurar dependências.
 
-2 - Instalação do angular pelo npm (ng version)
+2 - Instalação do Angular pelo npm (ng version)
 
 `sudo npm install -g @angular/cli`
 
@@ -75,7 +75,7 @@ ___
 	
 	* **scripts:** path do .js global. 
 	
-	* **index:** path da página base. "No caso do angular, tudo é envelopado aqui dentro, direta ou indiretamente."
+	* **index:** path da página base. "No caso do Angular, tudo é envelopado aqui dentro, direta ou indiretamente."
 	
 	* **main:** path da pasta coração da parada, responsável por fazer o bootstrap da aplicação, "hook."
  
@@ -111,7 +111,7 @@ ___
 
 ### Módulos
 
-O angular trabalha com o conceito de módulos e componentes. O módulo pai é o app/app.module.ts e este pode ter submódulos.
+O Angular trabalha com o conceito de módulos e componentes. O módulo pai é o app/app.module.ts e este pode ter submódulos.
 O que o usuário vê em nossas páginas na verdade são componentes. Já os módulos são, na verdade, limitadores de contextos.
 O que dá vida e cor aos módulos, são os componentes.
 
@@ -136,7 +136,7 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ~~~
 
-Abrindo o **app/app.component.ts** podemos ver que ele tem um **decorator** chamado **@Component({})** . Dentro dele temos algumas propriedades que dão informações ao angular para que os componentes possam ter funcionalidades a mais.
+Abrindo o **app/app.component.ts** podemos ver que ele tem um **decorator** chamado **@Component({})** . Dentro dele temos algumas propriedades que dão informações ao Angular para que os componentes possam ter funcionalidades a mais.
 
 ~~~typescript
 
@@ -164,7 +164,7 @@ ___
 
 ### Interpolação
 
-Em um template HTML no angular existem alguns recursos que são importantes no decorrer de um projeto.
+Em um template HTML no Angular existem alguns recursos que são importantes no decorrer de um projeto.
 A Interpolação nada mais é do que um recurso de ‘embedar’ expressões dentro de uma área delimitada por {{ .. }}.
 
 O title do código exposto acima foi interpolada no template **app/app.component.html**.
@@ -192,7 +192,7 @@ export class AppComponent {
 ~~~
 
 
-O angular nos dá todos os recursos do html e mais algumas coisas, como é o caso da interpolação e outros recursos.
+O Angular nos dá todos os recursos do html e mais algumas coisas, como é o caso da interpolação e outros recursos.
 
 ___
 
@@ -272,7 +272,7 @@ Precisamos criar uma classe que represente nossa lista de componentes:
 
 ![img/006.png](https://github.com/aluiziomonteiro/angular/blob/master/img/006.png)
 
-3 - Para o angular saber que esta classe é um componente, é preciso ter um **decorator**. Então vamos importar Component:
+3 - Para o Angular saber que esta classe é um componente, é preciso ter um **decorator**. Então vamos importar Component:
 
 
 ~~~typescript
@@ -390,7 +390,7 @@ A definição do path do estilo global fica localizado no arquivo angular.json:
 
 ![img/011.png](https://github.com/aluiziomonteiro/angular/blob/master/img/011.png)
 
-6 - Rode o ng serve e acesse localhost:4200 pelo brownser:
+6 - Rode o ng serve e acesse localhost:4200 pelo Browser:
 
 
 ![img/012.png](https://github.com/aluiziomonteiro/angular/blob/master/img/012.png)
@@ -501,7 +501,7 @@ Vamos inicializar nosso componente preenchendo nossa lista de array de Cursos:
 </table>
 ~~~
 
-11 - Vamos iterar sobre as informações dos cursos e para isso, vamos utilizar o `*ngFor` do angular dentro da tag `<tr>`:
+11 - Vamos iterar sobre as informações dos cursos e para isso, vamos utilizar o `*ngFor` do Angular dentro da tag `<tr>`:
 
 ~~~typescript
 <h4>Course List</h4>
@@ -555,7 +555,7 @@ Revisando:
 
 7 - Exportamos o módulo do bootstrap.
 
-8 – Vimos como exibir nossa lista no browser utilizando o `*ngFor`.
+8 – Vimos como exibir nossa lista no Browser utilizando o `*ngFor`.
 
 
 Visão global do projeto:
@@ -591,7 +591,7 @@ Criaremos um componente que vai receber informação do  **Rating** e conforme f
     <tbody>
         <tr *ngFor="let course of courses">
         
-            <!-- Com os colchetes, o angular vai entender que precisa mesclar o src com o valor da variável-->
+            <!-- Com os colchetes, o Angular vai entender que precisa mesclar o src com o valor da variável-->
              <td> <img [src]="course.imageUrl" width="40" height="40"> </td>
              
             <td>{{course.name}}</td>
@@ -612,7 +612,7 @@ Agora vamos passar para a criação do nosso componente de estrela.
 ![img/015.png](https://github.com/aluiziomonteiro/angular/blob/master/img/015.png)
 
 Até aqui, não há nenhuma novidade.
-No componente anterior, nós carregamos as informações com `OnInit`, mas como o angular trabalha com http de forma assíncrona, nós não sabemos se a informação será carregada exatamente no momento da inicialização. Para detectar e carregar a informação de forma correta, vamos utilizar o `OnChanges`.
+No componente anterior, nós carregamos as informações com `OnInit`, mas como o Angular trabalha com http de forma assíncrona, nós não sabemos se a informação será carregada exatamente no momento da inicialização. Para detectar e carregar a informação de forma correta, vamos utilizar o `OnChanges`.
 
 2 - Implemente a classe OnChanges:
 
@@ -873,7 +873,7 @@ Reinicie o server e teste a application:
 
 Agora podemos continuar com a Injeção.
 
-5 - Na classe **course-service.ts**, use um **decorator** para informar ao angular que esta classe é elegível para ser uma injeção de dependências. O atributo **providedIn** vai especificar o lugar que a classe será injetada:
+5 - Na classe **course-service.ts**, use um **decorator** para informar ao Angular que esta classe é elegível para ser uma injeção de dependências. O atributo **providedIn** vai especificar o lugar que a classe será injetada:
 
 ~~~typescript
 
@@ -912,7 +912,7 @@ export class CourseService {
 ...
 ~~~
 
-Obs: Evite criar variáveis comuns em classes de serviço. Quando o angular carrega o módulo raiz, ele cria uma instância do nosso objeto e sai por aí replicando conforme for as referências. Variáveis comuns criadas aqui serão replicadas, ocupando memória sem uma real necessidade. Portanto, tenha somente métodos e variáveis estáticas dentro de suas services.
+Obs: Evite criar variáveis comuns em classes de serviço. Quando o Angular carrega o módulo raiz, ele cria uma instância do nosso objeto e sai por aí replicando conforme for as referências. Variáveis comuns criadas aqui serão replicadas, ocupando memória sem uma real necessidade. Portanto, tenha somente métodos e variáveis estáticas dentro de suas services.
 
 Vamos injetar nossa dependência **course-service.ts** dentro do componente **course-list-component.ts**:
 
@@ -935,7 +935,7 @@ export class CourseListComponent implements OnInit{ // OnInit
 }
 ~~~
 
-Quando o angular carregar a nossa aplicação, ele carregará também o nosso **course-service.ts** entendendo que o mesmo está elegível para a injeção de dependências por causa da anotação **@Injectable** e quando o angular perceber que temos um construtor, que é do mesmo tipo do objeto elegível, o angu injeta o objeto no construtor.
+Quando o Angular carregar a nossa aplicação, ele carregará também o nosso **course-service.ts** entendendo que o mesmo está elegível para a injeção de dependências por causa da anotação **@Injectable** e quando o Angular perceber que temos um construtor, que é do mesmo tipo do objeto elegível, o angu injeta o objeto no construtor.
 
 8 - Declare um construtor para que a classe possa receber a dependências:
 
@@ -1356,7 +1356,7 @@ Agora sim temos isto:
 
 ![img/Diagrama6.png](https://github.com/aluiziomonteiro/angular/blob/master/img/Diagrama6.png)
 
-9 - Reinicie o servidor e veja o resultado no browser:
+9 - Reinicie o servidor e veja o resultado no Browser:
 
 ![img/034.png](https://github.com/aluiziomonteiro/angular/blob/master/img/034.png)
 
@@ -1368,7 +1368,7 @@ Vamos criar a nossa primeira rota.
 
 Todos os módulos que formos importar, vamos utilizar o módulo de imports.
 
-2 - Importe o pacote de rotas do angular **RouterModule**;
+2 - Importe o pacote de rotas do Angular **RouterModule**;
 
 ~~~typescript
 ...
@@ -1392,7 +1392,7 @@ import { RouterModule } from '@angular/router'; // Módulo de Rotas
 ...
 ~~~
 
-3 - Para que o angular carregue nossa aplicação na inicialização, vamos utilizar a declaração: **RouterModule.forRoot([])**
+3 - Para que o Angular carregue nossa aplicação na inicialização, vamos utilizar a declaração: **RouterModule.forRoot([])**
 
 O **forRoot([])** espera receber um array de rotas.
 Vamos declarar todas as rotas da nossa aplicação dentro dele.
@@ -1422,14 +1422,14 @@ imports: [
       {
         path: '', redirectTo: 'courses', pathMatch: 'full'
       },
-      { // quando for escrito "courses" na url do browser vai ser acessado o componente "CourseListComponent"
+      { // quando for escrito "courses" na url do Browser vai ser acessado o componente "CourseListComponent"
         path: 'courses', component: CourseListComponent
       }
     ])
 ...
 ~~~
 
-Como estamos usando rotas, agora não faz mais sentido utilizarmos seletores para acessar nossas páginas. Quem vai acessar as páginas agora é o caminho digitado na url do browser.
+Como estamos usando rotas, agora não faz mais sentido utilizarmos seletores para acessar nossas páginas. Quem vai acessar as páginas agora é o caminho digitado na url do Browser.
 O uso do selector é ideal para adicionarmos componentes dentro de outros componentes.
 
 6 - Vá para o componente **course-list-component.ts** e retire o `selector`:
@@ -1438,13 +1438,13 @@ O uso do selector é ideal para adicionarmos componentes dentro de outros compon
 
 7 - Retire a as tags: `<app-course-list></app-course-list>` de **app.component.html**.
 
-Precisamos informar ao angular onde esta troca "switch" será realizada. No caso específico desta aplicação, esta troca será feita na div container do **app.component.html** com o selector de `router-outlet`:
+Precisamos informar ao Angular onde esta troca "switch" será realizada. No caso específico desta aplicação, esta troca será feita na div container do **app.component.html** com o selector de `router-outlet`:
 
 ~~~typescript
 <app-nav-bar> </app-nav-bar>
 
 <div class="container">
-	// Avisa ao angular que quando uma rota for modificada, o resultado será carregado aqui.
+	// Avisa ao Angular que quando uma rota for modificada, o resultado será carregado aqui.
     <router-outlet></router-outlet>
 </div>
 ~~~
@@ -1485,7 +1485,7 @@ export class Error404Component {
 
 ![img/039.png](https://github.com/aluiziomonteiro/angular/blob/master/img/039.png)
 
-5 - Teste alguma url estranha no browser:
+5 - Teste alguma url estranha no Browser:
 
 
 ![img/040.png](https://github.com/aluiziomonteiro/angular/blob/master/img/040.png)
@@ -1548,7 +1548,7 @@ Vamos criar botões para acessar informações sobre os nossos cursos.
 
 4 - Crie uma nova rota em **app.module.ts** para triggar o nosso componente.
 
-5 - Declare o nosso componente no ngModule para que angular entenda que ele é um componente.
+5 - Declare o nosso componente no ngModule para que Angular entenda que ele é um componente.
 
 Código do ngModule:
 
@@ -2426,7 +2426,7 @@ Caso não exista um id, vamos ter que retornar um post. O back end será o respo
 ...
 ~~~
 
-5 - Reinicie o server, abra o browser e edite alguma informação:
+5 - Reinicie o server, abra o Browser e edite alguma informação:
 
 ![img/058.png](https://github.com/aluiziomonteiro/angular/blob/master/img/058.png)
 
@@ -2873,7 +2873,7 @@ Teremos também só um módulo de core, mas conforme for o contexto das suas fut
 
 5 - Dentro da pasta **/core**, crie o arquivo **core.module.ts**.
 
-6 - Crie a classe ** CoreModule** e indique para o angular que a classe está elegível para ser um módulo.
+6 - Crie a classe ** CoreModule** e indique para o Angular que a classe está elegível para ser um módulo.
 
 7 - Crie o declarators e um exports e em seguida, declare o navbar em ambos:
 
@@ -2990,7 +2990,7 @@ export class CoreModule{
 
 Cuidado para não deixar componentes declarados no módulo pai, pois se estiverem assim, e não declarados nos seus respectivos componentes, a aplicação vai ficar funcionando, mas de nada adiantou a segregação.
 
-
+[Código do Projeto](https://github.com/aluiziomonteiro/angular.git)
 
 
 
