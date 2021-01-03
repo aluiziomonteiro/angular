@@ -2563,7 +2563,6 @@ Requisições em http serão muito utilizadas nos próximos cursos.
 [Código do Projeto](https://github.com/aluiziomonteiro/angular/tree/909c9a6c0981df7e36a2dbf08289a1df2893a92a)
 
 ___
-
 ### Segregando a Aplicação em Módulos
 
 Módulo é uma abstração. Um conceito que nos ajuda a separar a nossa aplicação. Vamos imaginar a aplicação como sendo uma casa que possuí vários cômodos. Cada cômodo é como se fosse um módulo. O que dá vida ao cômodo, são os móveis.
@@ -2627,7 +2626,7 @@ export class CourseModule{
 
 ![img/063.png](https://github.com/aluiziomonteiro/angular/blob/master/img/063.png)
 
-Xingou cachorro, gato, papagaio, tudo que anda, voa, nada e rasteja, mas tudo bem. Vamos ver com calma:
+Xingou cachorro, gato e papagaio, mas tudo bem. Vamos ver com calma:
 
 1 - O Angular não aceita que um módulo seja importado em mais de um lugar, portanto, devemos remover o **CourseInfo** e o **CourseList** do **app.module.ts**, pois eles já estão declarados em nosso novo módulo **course.modules.ts**:
 
@@ -2726,17 +2725,17 @@ ___
 
 É uma pasta que vai conter componentes genéricos, que, conforme for a necessidade, poderão ser importados.
 
-Ex: O nosso componente de estrela, que é um componente pequeno, mas queremos que ele possa ser usado em vários lugares diferententes da nossa aplicação;
+Ex: O nosso componente de estrela, que é um componente pequeno, mas queremos que ele possa ser usado em vários lugares diferentes da nossa aplicação:
 
 1 - Crie uma pasta, dentro de **/app** chamada **/shared**.
 
 2 - Dentro de **/shared**, cria outra pasta chamada **/component** e outra chamada **/pipe**.
 
-3 - Arraste o componente de estrela para dentro da pasta **app/shared/component** e clique em Ok para atualizar os imports.
+3 - Arraste o componente de estrela para dentro da pasta **app/shared/component** e clique em **yes** para atualizar os imports.
 
-É importante criar um módulo expecífico para a estrela, pois como a estrela precisa tambem de outros componentes, não convém carregar tudo isso no módulo curso sempre, ou seja, queremos carregar somente o que for preciso e nos momentos certos para não pesar a nossa aplicação.
+É importante criar um módulo específico para a estrela, pois como a estrela precisa também de outros componentes, não convém carregar tudo isso no módulo curso sempre, ou seja, queremos carregar somente o que for preciso e nos momentos certos para não pesar a nossa aplicação.
 
-4 - Crie o módulo **star.module.ts** dentro da pasta **/star**.
+4 - Crie o módulo **star.module.ts** dentro da pasta **/star**:
 
 ![img/066.png](https://github.com/aluiziomonteiro/angular/blob/master/img/066.png)
 
@@ -2749,6 +2748,11 @@ import { StarComponent } from "./star-component";
 @NgModule({
     declarations:[
         StarComponent
+    ],
+    // Informa ao Angular que queremos exportar coisas deste módulo para serem utilizadas no módulo que o importar.
+    // Quando formos importar este componente dentro de course módule, este export vai torná-lo disponível.
+    exports: [
+        StarComponent
     ]
 })
 export class StarModule{
@@ -2757,21 +2761,95 @@ export class StarModule{
 ~~~
 
 
+6 - Agora em **course.module.ts**, delete o `StarComponent` do `declaration` e coloque-o nos `imports`: 
+
+![img/067.png](https://github.com/aluiziomonteiro/angular/blob/master/img/067.png)
+
+7 - Restarte o servidor e teste se está tudo Okay:
+
+![img/068.png](https://github.com/aluiziomonteiro/angular/blob/master/img/068.png)
+
+Temos a nossa aplicação funcionando normalmente, porém, agora o componente de estrela também foi segregado.
+
+Vamos segregar o nosso pipe também.
+
+1 - Pegue o **replace.pipe.ts** que está dentro da pasta **/pipe** antiga e cole dentro de **/shared/pipe**.
+
+2 - Dê **yes** para importar as dependências.
+
+3 - Apague a pasta **/pipe** antiga.
+
+4 - Crie um novo módulo dentro de **/shared/pipe**. Ele vai servir para todos os outros pipes que eventualmente venham à existir dentro da pasta **/shared**.
+
+Faremos da mesma forma que foi feito com a estrela:
+
+~~~typescript
+import { NgModule } from "@angular/core";
+import { ReplacePipe } from "./replace.pipe";
+
+@NgModule({ // Esta classe é elegível para ser um módulo do Angular
+    declarations: [
+        ReplacePipe
+    ],
+    exports: [ // Para que o pipe possa ser usado em qualquer lugar
+        ReplacePipe
+    ]
+})
+export class AppPipeModule {
+
+}
+~~~
+Obs: No caso desta aplicação, nós vamos ter um único módulo para todos os pipes. Caso as suas aplicações futuras venham a ter muitos pipes tipo: pipes para textos, pipes para finanças e etc, você deve pensar na hipótese de segregar isso em módulos mais específicos.
+
+5 - Remova a declaração do replacePipe do módulo **course-module.ts**, que está em declarator, e chame-a via import conforme a seguir:
+
+~~~typescript
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { StarModule } from "../shared/component/star/star.module";
+import { AppPipeModule } from "../shared/pipe/app-pipe.module";
+
+import { CourseInfoComponent } from "./course-info.component";
+import { CourseListComponent } from "./course-list-component";
+
+@NgModule({
+    declarations: [
+        CourseListComponent,
+        CourseInfoComponent
+    ],
+    imports: [ 
+        StarModule,
+        CommonModule,
+        FormsModule,
+        AppPipeModule,
+        RouterModule.forChild([ 
+            { 
+                path: 'courses', component: CourseListComponent 
+            },
+            {
+                path: 'courses/info/:id', component: CourseInfoComponent
+            }
+        ])
+    ]
+})
+export class CourseModule{
+
+}
+~~~
+
+Ao mexer nos módulos, sempre restarte a aplicação para limpar o cache.
+
+6 - Teste a aplicação:
 
 
 
+![img/069.png](https://github.com/aluiziomonteiro/angular/blob/master/img/069.png)
 
+A ideia de separação em módulos, tem como objetivo fazer com que seja importado somente o que for necessário no momento ideal.
 
-
-
-
-
-
-
-
-
-
-
+___
 
 
 
