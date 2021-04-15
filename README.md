@@ -1238,7 +1238,7 @@ export class ReplacePipe implements PipeTransform{
 Nosso pipe está criado.
 Agora vamos chamá-lo dentro do nosso component.
 
-1 - Abra o arquivo **course-list-component.ts** e concatene o pipe para o campo code:
+1 - Abra o arquivo **course-list-component.html** e concatene o pipe para o campo code:
 
 `<td>{{course.code | lowercase | replace: '-'; ' '}}</td>`
 
@@ -2344,7 +2344,7 @@ ngOnInit(){
 ...
 ~~~
 
-Já podemos fazer o teste acessando o cotão Editar na interface:
+Já podemos fazer o teste acessando o botão Editar na interface:
 
 ![img/055.png](https://github.com/aluiziomonteiro/angular/blob/master/img/055.png)
 
